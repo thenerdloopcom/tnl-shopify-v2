@@ -1,10 +1,10 @@
-{%- comment -%} Usage: {% render 'product-card', product: product %} {%- endcomment -%}
+{%- comment -%} Featured product card — compact product meta with quick-view bag trigger. {%- endcomment -%}
 {%- assign v = product.selected_or_first_available_variant -%}
 <article class="product-card">
   <a href="{{ product.url }}" class="card-image">
     <div class="product-art">
       {%- if product.featured_image -%}
-        {{ product.featured_image | image_url: width: 700 | image_tag: loading: 'lazy', alt: product.title }}
+        {{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: product.title }}
       {%- endif -%}
       {%- if product.tags contains 'customize-it' -%}
         <span class="customize-tag">CUSTOMIZE IT →</span>
@@ -12,41 +12,25 @@
     </div>
   </a>
 
-  <a href="{{ product.url }}" class="card-info">
-    <div>
-      <p class="eyebrow">{{ product.type }}</p>
+  <div class="card-info card-info--quick-view">
+    <a href="{{ product.url }}" class="card-product-meta">
       <h3>{{ product.title }}</h3>
-      {%- if product.metafields.custom.subtitle != blank -%}
-        <p class="subtitle">{{ product.metafields.custom.subtitle }}</p>
-      {%- endif -%}
-    </div>
-    <strong>{{ v.price | money_without_trailing_zeros }}</strong>
-  </a>
+      <strong>{{ v.price | money_without_trailing_zeros }}</strong>
+    </a>
 
-  <div class="card-actions">
-    {%- if product.available == false -%}
-      <button type="button" class="add-button" disabled>SOLD OUT</button>
-
-    {%- elsif product.has_only_default_variant -%}
-      <button type="button" class="add-button" data-add="{{ v.id }}">ADD TO BAG ↗</button>
-
-      {%- if product.tags contains 'customize-it' -%}
-        <a href="{{ product.url }}" class="add-button buy-now-card">
-          <span>BUY NOW</span><span>→</span>
-        </a>
-      {%- else -%}
-        <form action="{{ routes.cart_add_url }}" method="post" class="buy-now-form">
-          <input type="hidden" name="id" value="{{ v.id }}">
-          <input type="hidden" name="quantity" value="1">
-          <input type="hidden" name="return_to" value="/checkout">
-          <button type="submit" class="add-button buy-now-card">
-            <span>BUY NOW</span><span>→</span>
-          </button>
-        </form>
-      {%- endif -%}
-
+    {%- if product.available -%}
+      <button
+        type="button"
+        class="quick-view-trigger"
+        data-quick-view="{{ product.url }}?view=quick-view"
+        aria-label="Quick view {{ product.title | escape }}"
+      >
+        {{ 'icon-cart.svg' | inline_asset_content }}
+      </button>
     {%- else -%}
-      <a href="{{ product.url }}" class="add-button">CHOOSE OPTIONS ↗</a>
+      <span class="quick-view-trigger quick-view-trigger--disabled" aria-label="Sold out">
+        {{ 'icon-cart.svg' | inline_asset_content }}
+      </span>
     {%- endif -%}
   </div>
 </article>

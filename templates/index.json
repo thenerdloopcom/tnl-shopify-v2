@@ -18,15 +18,17 @@
         "line_3": "NERDS.",
         "description": "Handmade masks, metallic signs, and artifacts for the true fans. Built to last, designed to impress.",
         "button_label": "SHOP THE DROP",
-        "button_link": "https://thenerdloop.com/collections/all"
+        "button_link": "https://thenerdloop.com/collections/all",
+        "autoplay": true,
+        "autoplay_delay": 3
       }
     },
     "manifesto": {
       "type": "manifesto",
       "settings": {
         "left": "THE NERDLOOP",
-        "text": "NOT MERCH.",
-        "accent": "MEMORY.",
+        "text": "",
+        "accent": "NOT MERCH. MEMORY.",
         "right": "EST. 2026"
       }
     },
@@ -94,11 +96,11 @@
         "padding_bottom": 64,
         "padding_top_mobile": 40,
         "padding_bottom_mobile": 40,
-        "bg_color": "#ffffff",
-        "text_color": "#0e0e0e",
+        "bg_color": "#0e0e0e",
+        "text_color": "#ffffff",
         "heading_size_desktop": 76,
         "heading_size_mobile": 40,
-        "title_color": "#0e0e0e",
+        "title_color": "#ffffff",
         "title_size": 16,
         "title_spacing": 4,
         "image_radius": 4,
@@ -146,7 +148,7 @@
             "product": "",
             "product_name": "",
             "tag": "",
-            "card_color": "paper"
+            "card_color": "red"
           }
         },
         "t3": {
@@ -161,7 +163,7 @@
             "product": "",
             "product_name": "",
             "tag": "",
-            "card_color": "paper"
+            "card_color": "black"
           }
         },
         "t4": {
@@ -191,7 +193,7 @@
             "product": "",
             "product_name": "",
             "tag": "",
-            "card_color": "paper"
+            "card_color": "red"
           }
         }
       },
@@ -249,9 +251,9 @@
       "type": "story-strip",
       "settings": {
         "eyebrow": "THE CRAFT",
-        "heading": "HANDMADE",
-        "accent": "IN INDIA.",
-        "text": "Every mask is hand-stitched, every poster is QC'd by fans, and every metallic item is crafted for durability. We don't just sell items; we sell pieces of the universe you love.",
+        "heading": "HOMEGROWN",
+        "accent": "IN INDIA",
+        "text": "",
         "button_label": "READ THE STORY",
         "button_link": ""
       }
@@ -262,7 +264,7 @@
         "eyebrow": "STAY IN THE LOOP",
         "heading": "JOIN THE",
         "accent": "RESISTANCE.",
-        "text": "Get early access to drops, limited editions, and nerd lore."
+        "text": "SIGN UP TO GET FLAT 10% OFF ON YOUR FIRST ORDER."
       }
     }
   },

@@ -174,19 +174,19 @@
   </div>
 
   <style>
-    #tt-{{ section.id }} { background: var(--tt-bg); color: var(--tt-text); padding: var(--tt-pt) 0 var(--tt-pb); border-bottom: 2px solid var(--line, #050505); overflow: hidden; }
+    #tt-{{ section.id }} { background: var(--tt-bg); color: var(--tt-text); padding: var(--tt-pt) 0 var(--tt-pb); overflow: hidden; border-bottom: 1px solid #0E0E0E;}
     #tt-{{ section.id }} .tt__inner { padding: 0 5vw; }
 
     /* header */
     #tt-{{ section.id }} .tt__head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; margin-bottom: 40px; }
     #tt-{{ section.id }} .tt__eyebrow { font: 700 10px var(--font-jetbrains-mono), monospace; letter-spacing: .12em; margin: 0 0 18px; }
-    #tt-{{ section.id }} .tt__heading { font: 400 clamp(46px, 7vw, 104px)/.82 var(--font-anton), Impact, sans-serif; letter-spacing: -.04em; margin: 0; text-transform: uppercase; }
+    #tt-{{ section.id }} .tt__heading { font: 400 clamp(46px, 7vw, 104px)/.82 var(--font-anton); letter-spacing: -.04em; margin: 0; text-transform: uppercase; }
     #tt-{{ section.id }} .tt__heading span { color: var(--tt-accent); }
     #tt-{{ section.id }} .tt__sub { max-width: 420px; margin: 22px 0 0; font: 13px/1.6 var(--font-jetbrains-mono), monospace; color: var(--tt-muted); }
 
     /* summary */
     #tt-{{ section.id }} .tt__summary { display: flex; align-items: center; gap: 18px; border: var(--tt-border) solid var(--tt-line); background: var(--tt-card-bg); padding: 14px 20px; }
-    #tt-{{ section.id }} .tt__score { font: 400 64px/.8 var(--font-anton), Impact, sans-serif; letter-spacing: -.03em; }
+    #tt-{{ section.id }} .tt__score { font: 400 64px/.8 var(--font-jetbrains-mono); letter-spacing: -.03em; }
     #tt-{{ section.id }} .tt__score span { font-size: 22px; color: var(--tt-muted); letter-spacing: 0; margin-left: 2px; }
     #tt-{{ section.id }} .tt__summary-meta { display: grid; gap: 6px; }
     #tt-{{ section.id }} .tt__summary-meta small { font: 700 10px var(--font-jetbrains-mono), monospace; letter-spacing: .06em; }
@@ -214,11 +214,11 @@
     #tt-{{ section.id }} .tt__body { display: flex; flex-direction: column; gap: 12px; padding: 14px 16px 16px; flex: 1; }
     #tt-{{ section.id }} .tt__stars--card { font-size: 15px; }
     #tt-{{ section.id }} .tt__card--red .tt__stars i, #tt-{{ section.id }} .tt__card--blue .tt__stars i, #tt-{{ section.id }} .tt__card--purple .tt__stars i, #tt-{{ section.id }} .tt__card--black .tt__stars i { -webkit-text-stroke-color: currentColor; }
-    #tt-{{ section.id }} .tt__quote { margin: 0; font: 400 var(--tt-quote)/1.02 var(--font-anton), Impact, sans-serif; letter-spacing: -.01em; text-transform: uppercase; flex: 1; }
+    #tt-{{ section.id }} .tt__quote { margin: 0; font: 400 var(--tt-quote)/1.02 var(--font-jetbrains-mono); letter-spacing: -.01em; text-transform: uppercase; flex: 1; }
 
     #tt-{{ section.id }} .tt__meta { border-top: 2px solid currentColor; padding-top: 10px; display: grid; gap: 5px; font: 11px/1.4 var(--font-jetbrains-mono), monospace; }
     #tt-{{ section.id }} .tt__who { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
-    #tt-{{ section.id }} .tt__who strong { font: 900 14px 'Arial Black', sans-serif; letter-spacing: -.04em; }
+    #tt-{{ section.id }} .tt__who strong { font: 900 14px var(--font-mono); letter-spacing: -.04em; }
     #tt-{{ section.id }} .tt__verified { display: inline-flex; align-items: center; gap: 5px; font: 700 9px var(--font-jetbrains-mono), monospace; letter-spacing: .08em; border: 1px solid currentColor; padding: 3px 6px; text-transform: uppercase; }
     #tt-{{ section.id }} .tt__verified i { font-style: normal; }
     #tt-{{ section.id }} .tt__loc { font-size: 10px; opacity: .7; text-transform: uppercase; letter-spacing: .06em; }

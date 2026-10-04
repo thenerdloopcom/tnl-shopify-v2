@@ -10,6 +10,45 @@
     "'": '&#39;'
   }[c]));
 
+  /* ---------- featured product quick view ---------- */
+
+  const quickViewModal = $('[data-quick-view-modal]');
+  const quickViewFrame = $('[data-quick-view-frame]');
+
+  const openQuickView = (url) => {
+    if (!quickViewModal || !quickViewFrame) return;
+    quickViewFrame.src = url;
+    quickViewModal.hidden = false;
+    quickViewModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeQuickView = () => {
+    if (!quickViewModal || !quickViewFrame) return;
+    quickViewModal.hidden = true;
+    quickViewModal.setAttribute('aria-hidden', 'true');
+    quickViewFrame.src = 'about:blank';
+    document.body.style.overflow = '';
+  };
+
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('[data-quick-view]');
+    if (trigger) {
+      e.preventDefault();
+      e.stopPropagation();
+      openQuickView(trigger.dataset.quickView);
+      return;
+    }
+    if (e.target.closest('[data-quick-view-close]')) {
+      e.preventDefault();
+      closeQuickView();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && quickViewModal && !quickViewModal.hidden) closeQuickView();
+  });
+
   const json = (url, opts) => fetch(url, opts).then(async (r) => {
     const d = await r.json().catch(() => ({}));
     if (!r.ok) {
@@ -482,8 +521,14 @@
         );
       }
 
+      const routesRoot =
+        (window.Shopify &&
+          window.Shopify.routes &&
+          window.Shopify.routes.root) ||
+        '/';
+
       const response = await fetch(
-        window.Shopify.routes.root + 'cart/add.js',
+        routesRoot + 'cart/add.js',
         {
           method: 'POST',
           body: formData
@@ -501,7 +546,14 @@
       }
 
       await render();
-      openDrawer();
+
+      if (window.parent && window.parent !== window) {
+        // Inside the quick-view iframe: let the parent page close the
+        // modal and open its own bag drawer.
+        window.parent.postMessage({ type: 'tnl:cart-updated' }, window.location.origin);
+      } else {
+        openDrawer();
+      }
 
       btn.textContent = 'ADDED TO BAG!';
 
@@ -516,4 +568,49 @@
 
     btn.disabled = false;
   });
+  /* ---------- quick view -> parent bag sync ---------- */
+
+  window.addEventListener('message', async (e) => {
+    if (e.origin !== window.location.origin) return;
+    if (!e.data || e.data.type !== 'tnl:cart-updated') return;
+    if (!drawer) return;
+
+    closeQuickView();
+    await render();
+    openDrawer();
+  });
+
+  /* ---------- mobile menu ---------- */
+
+  const navEl = $('.site-header nav');
+  const menuBtn = $('[data-mobile-menu-toggle]');
+
+  const setMenu = (open) => {
+    if (!navEl || !menuBtn) return;
+    navEl.classList.toggle('nav-open', open);
+    menuBtn.setAttribute('aria-expanded', String(open));
+  };
+
+  document.addEventListener('click', (e) => {
+    if (!navEl || !menuBtn) return;
+
+    if (e.target.closest('[data-mobile-menu-toggle]')) {
+      setMenu(!navEl.classList.contains('nav-open'));
+    } else if (navEl.classList.contains('nav-open')) {
+      // tapping a link, or anywhere outside the menu, closes it
+      if (e.target.closest('.site-header nav a') || !e.target.closest('.site-header nav')) {
+        setMenu(false);
+      }
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setMenu(false);
+  });
+
+  window
+    .matchMedia('(min-width: 801px)')
+    .addEventListener('change', (m) => {
+      if (m.matches) setMenu(false);
+    });
 })();

@@ -29,7 +29,7 @@
       {{ shop.name }}
     {%- endif -%}
   </a>
-  <nav style="gap: {{ section.settings.nav_gap }}px;">
+  <nav id="site-nav" style="gap: {{ section.settings.nav_gap }}px;">
     {%- for link in linklists[section.settings.menu].links -%}
       <a href="{{ link.url }}"
          style="font-size: {{ section.settings.nav_font_size }}px;">
@@ -55,9 +55,10 @@
       </a>
     {% endif %}
 
-    <button type="button" class="mobile-menu" aria-label="Toggle menu"
-      onclick="this.closest('header').querySelector('nav').classList.toggle('nav-open')">
-      ☰
+    <button type="button" class="mobile-menu" data-mobile-menu-toggle
+      aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav">
+      <span class="icon-open" aria-hidden="true">☰</span>
+      <span class="icon-close" aria-hidden="true">✕</span>
     </button>
 
   </div>
@@ -87,13 +88,13 @@
       "type": "color",
       "id": "announcement_bg",
       "label": "Background color",
-      "default": "#000000"
+      "default": "#FC0301"
     },
     {
       "type": "color",
       "id": "announcement_color",
       "label": "Text color",
-      "default": "#ffffff"
+      "default": "#0E0E0E"
     },
     {
       "type": "header",
@@ -152,13 +153,13 @@
       "type": "color",
       "id": "header_bg",
       "label": "Background color",
-      "default": "#ffffff"
+      "default": "#0E0E0E"
     },
     {
       "type": "color",
       "id": "header_color",
       "label": "Text color",
-      "default": "#000000"
+      "default": "#FFFFFF"
     },
     {
       "type": "range",

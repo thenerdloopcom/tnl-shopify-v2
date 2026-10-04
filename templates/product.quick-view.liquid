@@ -1,0 +1,22 @@
+{% layout none %}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>:root{--font-anton:'Anton';--font-jetbrains-mono:'JetBrains Mono';--font-display:var(--font-anton);--font-mono:var(--font-jetbrains-mono)}</style>
+    {{ 'tnl.css' | asset_url | stylesheet_tag }}
+    <script>
+      window.Shopify = window.Shopify || {};
+      window.Shopify.routes = window.Shopify.routes || { root: {{ routes.root_url | json }} };
+    </script>
+  </head>
+  <body>
+    {% render 'cart-drawer' %}
+    {% section 'product' %}
+    <script src="{{ 'tnl.js' | asset_url }}" defer></script>
+  </body>
+</html>

@@ -58,9 +58,9 @@
             "source_collection": "access-cards",
             "match_type": "collection",
             "desktop_width_percent": 95,
-            "heading_size": 30,
+            "heading_size": 48,
             "section_padding": 60,
-            "text_color": "#333333",
+            "text_color": "#000000",
             "border_color": "#333333"
           },
           "blocks": {}

@@ -18,6 +18,14 @@
   </div>
 </section>
 
+<div class="quick-view-modal" data-quick-view-modal hidden aria-hidden="true">
+  <div class="quick-view-backdrop" data-quick-view-close></div>
+  <div class="quick-view-dialog" role="dialog" aria-modal="true" aria-label="Quick product view">
+    <button type="button" class="quick-view-close" data-quick-view-close aria-label="Close quick view">×</button>
+    <iframe title="Product quick view" data-quick-view-frame loading="lazy"></iframe>
+  </div>
+</div>
+
 {% schema %}
 {
   "name": "Featured products",

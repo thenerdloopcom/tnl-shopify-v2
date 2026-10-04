@@ -107,8 +107,8 @@
 {% stylesheet %}
   .tnl-sbc {
     --sbc-cream: #0E0E0E;
-    --sbc-font-head: var(--font-anton, 'Anton', Impact, sans-serif);
-    --sbc-font-mono: var(--font-jetbrains-mono, 'JetBrains Mono', ui-monospace, Menlo, monospace);
+    --sbc-font-head: var(--font-anton, 'Anton');
+    --sbc-font-mono: var(--font-jetbrains-mono, 'JetBrains Mono'), monospace;
 
     --sbc-fg-eff: var(--sbc-fg, var(--sbc-cream));
     --sbc-gutter: var(--sbc-gutter-m);
@@ -357,16 +357,17 @@
     { "type": "range", "id": "padding_bottom_mobile", "label": "Bottom padding (mobile)", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 40 },
 
     { "type": "header", "content": "Appearance" },
-    { "type": "color", "id": "bg_color", "label": "Background color", "default": "#FFFFFF" },
+    { "type": "color", "id": "bg_color", "label": "Background color", "default": "#0E0E0E" },
     {
       "type": "color",
       "id": "text_color",
       "label": "Text color",
+      "default": "#FFFFFF",
       "info": "Leave empty to use the theme's black."
     },
     { "type": "range", "id": "heading_size_desktop", "label": "Heading size (desktop)", "min": 24, "max": 140, "step": 2, "unit": "px", "default": 72 },
     { "type": "range", "id": "heading_size_mobile", "label": "Heading size (mobile)", "min": 20, "max": 80, "step": 2, "unit": "px", "default": 40 },
-    { "type": "color", "id": "title_color", "label": "Collection title color", "default": "#0E0E0E" },
+    { "type": "color", "id": "title_color", "label": "Collection title color", "default": "#FFFFFF" },
     { "type": "range", "id": "title_size", "label": "Collection title size", "min": 12, "max": 32, "step": 1, "unit": "px", "default": 16 },
     {
       "type": "range",
