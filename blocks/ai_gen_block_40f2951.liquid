@@ -1,0 +1,330 @@
+{% doc %}
+  @prompt
+    Restructure footer to two columns: left = brand logo + Instagram icon link,
+    right = "Quick Links" heading + vertical list of footer menu links.
+    Below that, a bottom bar with copyright text on the left and a single link on the right.
+    Keep existing background color, text color, and hover color exactly as configured.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-split-footer-{{ ai_gen_id }} {
+    display: block;
+    box-sizing: border-box;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin-inline: auto;
+    background: {{ block.settings.background_color }};
+    color: {{ block.settings.text_color }};
+    border-top: 1px solid rgba(14, 14, 14, 0.12);
+  }
+
+  .ai-split-footer-{{ ai_gen_id }}__top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 32px;
+    padding: {{ block.settings.vertical_padding }}px 40px;
+  }
+
+  .ai-split-footer-{{ ai_gen_id }}__col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .ai-split-footer-{{ ai_gen_id }}__heading {
+    margin: 0;
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  .ai-split-footer-{{ ai_gen_id }}__logo {
+    display: block;
+    max-width: min(100%, {{ block.settings.logo_width }}px);
+    line-height: 0;
+  }
+
+  .ai-split-footer-{{ ai_gen_id }}__logo img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .ai-split-footer-{{ ai_gen_id }}__brand-text {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    text-decoration: none;
+  }
+
+  .ai-split-footer-{{ ai_gen_id }}__icon {
+    color: {{ block.settings.text_color }};
+    line-height: 0;
+    transition: color 150ms ease;
+  }
+
+  .ai-split-footer-{{ ai_gen_id }}__icon:hover {
+    color: {{ block.settings.hover_color }};
+  }
+
+  .ai-split-footer-{{ ai_gen_id }}__icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .ai-split-footer-{{ ai_gen_id }}__menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ai-split-footer-{{ ai_gen_id }}__link {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.link_size }}px;
+    line-height: 1.4;
+    text-decoration: none;
+    transition: color 150ms ease;
+    width: fit-content;
+  }
+
+  .ai-split-footer-{{ ai_gen_id }}__link:hover {
+    color: {{ block.settings.hover_color }};
+  }
+
+  .ai-split-footer-{{ ai_gen_id }}__link:focus-visible,
+  .ai-split-footer-{{ ai_gen_id }}__icon:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+  }
+
+  .ai-split-footer-{{ ai_gen_id }}__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 40px;
+    border-top: 1px solid rgba(14, 14, 14, 0.12);
+  }
+
+  .ai-split-footer-{{ ai_gen_id }}__copyright {
+    margin: 0;
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.copyright_size }}px;
+    line-height: 1.4;
+  }
+
+  .ai-split-footer-{{ ai_gen_id }}__bottom-link {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.copyright_size }}px;
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+
+  .ai-split-footer-{{ ai_gen_id }}__bottom-link:hover {
+    color: {{ block.settings.hover_color }};
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-split-footer-{{ ai_gen_id }}__top,
+    .ai-split-footer-{{ ai_gen_id }}__bottom {
+      padding-inline: 20px;
+    }
+
+    .ai-split-footer-{{ ai_gen_id }}__top {
+      flex-direction: column;
+    }
+
+    .ai-split-footer-{{ ai_gen_id }}__bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+{% endstyle %}
+
+<footer class="ai-split-footer-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-split-footer-{{ ai_gen_id }}__top">
+    <div class="ai-split-footer-{{ ai_gen_id }}__col">
+      {% if block.settings.logo != blank %}
+        <a class="ai-split-footer-{{ ai_gen_id }}__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+          <img src="{{ block.settings.logo | image_url: width: 700 }}" alt="{{ block.settings.logo.alt | default: shop.name | escape }}" width="{{ block.settings.logo.width }}" height="{{ block.settings.logo.height }}" loading="lazy">
+        </a>
+      {% else %}
+        <a class="ai-split-footer-{{ ai_gen_id }}__brand-text" href="{{ routes.root_url }}">{{ shop.name | escape }}</a>
+      {% endif %}
+      {% if block.settings.instagram_url != blank %}
+        <a class="ai-split-footer-{{ ai_gen_id }}__icon" href="{{ block.settings.instagram_url }}" aria-label="Instagram" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="ai-split-footer-{{ ai_gen_id }}__col">
+      <h3 class="ai-split-footer-{{ ai_gen_id }}__heading">{{ block.settings.quick_links_heading | escape }}</h3>
+      {% if block.settings.menu != blank and block.settings.menu.links.size > 0 %}
+        <nav class="ai-split-footer-{{ ai_gen_id }}__menu" aria-label="Footer navigation">
+          {% for link in block.settings.menu.links %}
+            <a class="ai-split-footer-{{ ai_gen_id }}__link" href="{{ link.url }}">{{ link.title | escape }}</a>
+          {% endfor %}
+        </nav>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="ai-split-footer-{{ ai_gen_id }}__bottom">
+    <p class="ai-split-footer-{{ ai_gen_id }}__copyright">{{ block.settings.copyright_text | escape }}</p>
+    {% if block.settings.bottom_link_url != blank %}
+      <a class="ai-split-footer-{{ ai_gen_id }}__bottom-link" href="{{ block.settings.bottom_link_url }}">{{ block.settings.bottom_link_label | escape }}</a>
+    {% endif %}
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Split brand footer",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Brand logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo width",
+      "min": 60,
+      "max": 320,
+      "step": 10,
+      "unit": "px",
+      "default": 140
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "text",
+      "id": "quick_links_heading",
+      "label": "Quick links heading",
+      "default": "Quick Links"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Footer links"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright line",
+      "default": "© 2026 The NerdLoop. ALL RIGHTS RESERVED."
+    },
+    {
+      "type": "text",
+      "id": "bottom_link_label",
+      "label": "Bottom bar link label",
+      "default": "Terms and Policies"
+    },
+    {
+      "type": "url",
+      "id": "bottom_link_url",
+      "label": "Bottom bar link URL"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#0E0E0E"
+    },
+    {
+      "type": "color",
+      "id": "hover_color",
+      "label": "Link hover",
+      "default": "#FC0301"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "vertical_padding",
+      "label": "Vertical padding",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading font size",
+      "min": 14,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "link_size",
+      "label": "Link font size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "copyright_size",
+      "label": "Copyright font size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split brand footer"
+    }
+  ],
+  "tag": null,
+  "class": "split-brand-footer"
+}
+{% endschema %}

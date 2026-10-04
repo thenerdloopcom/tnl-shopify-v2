@@ -1,0 +1,43 @@
+<main class="route-page">
+  <section class="shop-section">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">THE NERDLOOP / SHOP</p>
+
+        <h1 class="shop-page-title">
+          {{ collection.title | upcase }}
+          <span>DROP.</span>
+        </h1>
+
+        {% if collection.description != blank %}
+          <p class="collection-description">{{ collection.description }}</p>
+        {% endif %}
+      </div>
+    </div>
+
+    {% paginate collection.products by 8 %}
+      <div class="product-grid">
+        {% for product in collection.products %}
+          {% render 'product-card', product: product %}
+        {% else %}
+          <div class="empty-shop">NOTHING HERE YET.</div>
+        {% endfor %}
+      </div>
+
+      {% if paginate.pages > 1 %}
+        <div class="tnl-pagination">
+          {% if paginate.previous %}<a href="{{ paginate.previous.url }}">← PREVIOUS</a>{% endif %}
+          <span>{{ paginate.current_page }} / {{ paginate.pages }}</span>
+          {% if paginate.next %}<a href="{{ paginate.next.url }}">NEXT →</a>{% endif %}
+        </div>
+      {% endif %}
+    {% endpaginate %}
+  </section>
+</main>
+
+{% schema %}
+{
+  "name": "TNL Collection",
+  "settings": []
+}
+{% endschema %}

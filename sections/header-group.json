@@ -1,0 +1,38 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "Header group",
+  "type": "header",
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "show_announcement": true,
+        "announcement": "FREE SHIPPING OVER INR 499/- |  BUY 3 GET 1 FREE ON ALL ALBUMS & FRAMES",
+        "announcement_bg": "#000000",
+        "announcement_color": "#ffffff",
+        "logo": "shopify://shop_images/TNL-Logo-NoBG.png",
+        "logo_width": 150,
+        "menu": "main-menu",
+        "nav_font_size": 12,
+        "nav_gap": 28,
+        "header_bg": "#ffffff",
+        "header_color": "#000000",
+        "header_padding": 20,
+        "horizontal_padding": 32,
+        "show_account": true,
+        "show_cart": true
+      }
+    }
+  },
+  "order": [
+    "header"
+  ]
+}

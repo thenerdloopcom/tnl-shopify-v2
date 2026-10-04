@@ -1,0 +1,41 @@
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+
+    <h1>
+      {{ section.settings.line_1 }}<br>
+      <em>{{ section.settings.line_2 }}</em> <span>{{ section.settings.line_3 }}</span>
+    </h1>
+
+    <p class="hero-description">{{ section.settings.description }}</p>
+
+    <div class="hero-cta">
+      <a href="{{ section.settings.button_link | default: routes.collections_url }}" class="comic-button">
+        {{ section.settings.button_label }} ↗
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-art">
+    {%- if section.settings.image -%}
+      {{ section.settings.image | image_url: width: 1400 | image_tag: loading: 'eager', alt: section.settings.line_1 }}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "DROP 002 / THE FANDOM COLLECTION" },
+    { "type": "text", "id": "line_1", "label": "Headline line 1", "default": "GEAR FOR" },
+    { "type": "text", "id": "line_2", "label": "Headline line 2 (italic)", "default": "THE" },
+    { "type": "text", "id": "line_3", "label": "Headline line 2 (accent)", "default": "NERDS." },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "Handmade masks, metallic signs, and artifacts for the true fans. Built to last, designed to impress." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "SHOP THE DROP" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "image_picker", "id": "image", "label": "Hero image" }
+  ],
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

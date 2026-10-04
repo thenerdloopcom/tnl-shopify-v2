@@ -1,0 +1,110 @@
+{% doc %}
+  @prompt
+    generate a black background footer, left side should render the logo for my brand, in the center it should say something as `© 2026 The NerdLoop. ALL RIGHTS RESERVED.`
+    and right side should horizontally render all footer menu links; text color should be white, but on hover over footer menu links make it red, Lets move the footer menu links to the bottom center of the footer in a single horizontal line; the line `
+    
+    © 2026 The NerdLoop. ALL RIGHTS RESERVED.`, make the footer menu links smalllllller and the 2026... line should move to the right side of the footer
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-footer-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    box-sizing: border-box;
+    background: #000000;
+    color: #ffffff;
+    padding: {{ block.settings.vertical_padding }}px {{ block.settings.horizontal_padding }}px;
+  }
+  .ai-footer-{{ ai_gen_id }}__inner {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 22px 24px;
+  }
+  .ai-footer-{{ ai_gen_id }}__brand { display: flex; align-items: center; min-width: 0; }
+  .ai-footer-{{ ai_gen_id }}__logo { display: block; width: {{ block.settings.logo_width }}px; max-width: 100%; height: auto; }
+  .ai-footer-{{ ai_gen_id }}__brand-name { color: #ffffff; font-size: 20px; font-weight: 700; text-decoration: none; }
+  .ai-footer-{{ ai_gen_id }}__copyright {
+    grid-column: 2;
+    margin: 0;
+    color: #ffffff;
+    text-align: right;
+    font-size: {{ block.settings.text_size }}px;
+    line-height: 1.4;
+    letter-spacing: 0.04em;
+  }
+  .ai-footer-{{ ai_gen_id }}__nav {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px 20px;
+    white-space: nowrap;
+    overflow-x: auto;
+    padding: 2px 0;
+  }
+  .ai-footer-{{ ai_gen_id }}__link {
+    flex: 0 0 auto;
+    color: #ffffff;
+    font-size: 10px;
+    line-height: 1.4;
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+  .ai-footer-{{ ai_gen_id }}__link:hover,
+  .ai-footer-{{ ai_gen_id }}__link:focus-visible { color: #FC0301; }
+  .ai-footer-{{ ai_gen_id }}__link:focus-visible,
+  .ai-footer-{{ ai_gen_id }}__brand-name:focus-visible { outline: 2px solid #ffffff; outline-offset: 4px; }
+  @media screen and (max-width: 749px) {
+    .ai-footer-{{ ai_gen_id }} { padding: {{ block.settings.vertical_padding | divided_by: 2 }}px 20px; }
+    .ai-footer-{{ ai_gen_id }}__inner { grid-template-columns: 1fr; justify-items: center; gap: 14px; }
+    .ai-footer-{{ ai_gen_id }}__brand { justify-content: center; }
+    .ai-footer-{{ ai_gen_id }}__copyright { grid-column: 1; text-align: right; justify-self: end; }
+    .ai-footer-{{ ai_gen_id }}__nav { grid-column: 1; justify-content: flex-start; width: 100%; gap: 8px 16px; }
+  }
+{% endstyle %}
+
+<footer class="ai-footer-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-footer-{{ ai_gen_id }}__inner">
+    <div class="ai-footer-{{ ai_gen_id }}__brand">
+      {% if block.settings.logo != blank %}
+        <a href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home">
+          <img class="ai-footer-{{ ai_gen_id }}__logo" src="{{ block.settings.logo | image_url: width: 600 }}" alt="{{ block.settings.logo.alt | default: shop.name | escape }}" loading="lazy" width="{{ block.settings.logo.width }}" height="{{ block.settings.logo.height }}">
+        </a>
+      {% else %}
+        <a class="ai-footer-{{ ai_gen_id }}__brand-name" href="{{ routes.root_url }}">{{ shop.name | escape }}</a>
+      {% endif %}
+    </div>
+    <p class="ai-footer-{{ ai_gen_id }}__copyright">{{ block.settings.copyright_text | escape }}</p>
+    {% if block.settings.footer_menu != blank %}
+      <nav class="ai-footer-{{ ai_gen_id }}__nav" aria-label="Footer navigation">
+        {% for link in block.settings.footer_menu.links %}
+          <a class="ai-footer-{{ ai_gen_id }}__link" href="{{ link.url }}">{{ link.title | escape }}</a>
+        {% endfor %}
+      </nav>
+    {% endif %}
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Black footer bar",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Brand logo" },
+    { "type": "link_list", "id": "footer_menu", "label": "Footer menu" },
+    { "type": "text", "id": "copyright_text", "label": "Copyright text", "default": "© 2026 The NerdLoop. ALL RIGHTS RESERVED." },
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "logo_width", "label": "Logo width", "min": 60, "max": 240, "step": 10, "unit": "px", "default": 140 },
+    { "type": "range", "id": "text_size", "label": "Copyright text size", "min": 10, "max": 20, "step": 1, "unit": "px", "default": 12 },
+    { "type": "range", "id": "vertical_padding", "label": "Vertical padding", "min": 10, "max": 60, "step": 5, "unit": "px", "default": 25 },
+    { "type": "range", "id": "horizontal_padding", "label": "Horizontal padding", "min": 10, "max": 80, "step": 5, "unit": "px", "default": 30 }
+  ],
+  "presets": [{ "name": "Black footer bar" }],
+  "tag": null,
+  "class": "black-footer-bar"
+}
+{% endschema %}

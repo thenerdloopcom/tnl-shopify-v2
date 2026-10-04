@@ -1,0 +1,60 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "Footer group",
+  "type": "footer",
+  "sections": {
+    "blocks_BqKjpX": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_40f2951_aH4zbd": {
+          "type": "ai_gen_block_40f2951",
+          "name": "FinalFooter",
+          "settings": {
+            "logo": "shopify://shop_images/TNL_Black.png",
+            "logo_width": 200,
+            "instagram_url": "https://www.instagram.com/thenerdloopco",
+            "quick_links_heading": "Quick Links",
+            "menu": "footer",
+            "copyright_text": "© 2026 The NerdLoop. ALL RIGHTS RESERVED.",
+            "bottom_link_label": "Terms and Policies",
+            "bottom_link_url": "",
+            "background_color": "#FC0301",
+            "text_color": "#0e0e0e",
+            "hover_color": "#fc0301",
+            "desktop_width_percent": 100,
+            "vertical_padding": 25,
+            "heading_size": 18,
+            "link_size": 10,
+            "copyright_size": 11
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_40f2951_aH4zbd"
+      ],
+      "name": "Centered brand footer",
+      "settings": {}
+    },
+    "footer": {
+      "type": "footer",
+      "disabled": true,
+      "custom_css": [],
+      "settings": {
+        "logo": "shopify://shop_images/TNL-Logo-NoBG.png"
+      }
+    }
+  },
+  "order": [
+    "blocks_BqKjpX",
+    "footer"
+  ]
+}

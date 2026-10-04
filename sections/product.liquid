@@ -1,0 +1,1055 @@
+{%- liquid
+  assign is_card = false
+  assign can_personalize = false
+
+  if product.tags contains 'access-card' or product.type == 'Access Cards'
+    assign is_card = true
+  endif
+
+  if product.tags contains 'customize-it'
+    assign can_personalize = true
+  endif
+
+  assign v = product.selected_or_first_available_variant
+-%}
+
+<div class="route-page">
+  <div class="route-content">
+
+    <div class="product-gallery" data-gallery>
+
+      <div class="gallery-main {% if is_card %}card-gallery-main{% endif %}" data-gallery-main-wrap>
+
+        {%- if product.featured_image -%}
+          <button
+            type="button"
+            class="gallery-image-button"
+            data-image-preview
+            aria-label="View larger image"
+          >
+            {{
+              product.featured_image
+              | image_url: width: 1600
+              | image_tag:
+                loading: 'eager',
+                alt: product.title,
+                data-gallery-main: 'true'
+            }}
+
+            <span class="image-zoom-hint">
+              ↗ CLICK TO EXPAND
+            </span>
+          </button>
+        {%- endif -%}
+
+        {%- if can_personalize -%}
+          {%- assign frame = product.metafields.custom.photo_frame | default: '27,43,46,40,5' | split: ',' -%}
+
+          <div
+            class="photo-frame"
+            data-photo-frame
+            style="
+              left:{{ frame[0] | strip }}%;
+              top:{{ frame[1] | strip }}%;
+              width:{{ frame[2] | strip }}%;
+              height:{{ frame[3] | strip }}%;
+              border-radius:{{ frame[4] | default: 5 | strip }}%;
+            "
+          >
+            <img alt="Your photo">
+          </div>
+        {%- endif -%}
+
+      </div>
+
+      {%- if product.images.size > 1 -%}
+        <div class="gallery-controls">
+
+          <button
+            type="button"
+            data-gallery-step="-1"
+            aria-label="Previous image"
+          >
+            ‹
+          </button>
+
+          {%- for image in product.images -%}
+            <button
+              type="button"
+              data-thumb="{{ image | image_url: width: 1600 }}"
+              {% if forloop.first %}class="selected"{% endif %}
+              aria-label="Image {{ forloop.index }}"
+            >
+              <img
+                src="{{ image | image_url: width: 120 }}"
+                alt=""
+                width="120"
+                height="120"
+                loading="lazy"
+              >
+            </button>
+          {%- endfor -%}
+
+          <button
+            type="button"
+            data-gallery-step="1"
+            aria-label="Next image"
+          >
+            ›
+          </button>
+
+        </div>
+      {%- endif -%}
+
+    </div>
+
+
+    <div class="product-detail">
+
+      <p class="eyebrow">
+        {{ product.type | upcase }} /
+        {% if can_personalize %}
+          PHOTO PERSONALIZED
+        {% elsif is_card %}
+          ACCESS CARD
+        {% else %}
+          FAN-MADE EDITION
+        {% endif %}
+      </p>
+
+      <h1>{{ product.title }}</h1>
+
+      {%- if product.metafields.custom.subtitle != blank -%}
+        <p class="detail-subtitle">
+          {{ product.metafields.custom.subtitle }}
+        </p>
+      {%- endif -%}
+
+      <strong class="detail-price">
+        {{ v.price | money_without_trailing_zeros }}
+      </strong>
+
+      <div class="product-description">
+        {{ product.description }}
+      </div>
+
+
+      <form
+        action="{{ routes.cart_add_url }}"
+        method="post"
+        enctype="multipart/form-data"
+        data-add-form
+      >
+
+        {%- if product.has_only_default_variant -%}
+
+          <input
+            type="hidden"
+            name="id"
+            value="{{ v.id }}"
+          >
+
+        {%- else -%}
+
+          <select
+            name="id"
+            class="variant-select"
+            aria-label="Option"
+          >
+            {%- for variant in product.variants -%}
+              <option
+                value="{{ variant.id }}"
+                {% unless variant.available %}disabled{% endunless %}
+                {% if variant == v %}selected{% endif %}
+              >
+                {{ variant.title }} —
+                {{ variant.price | money_without_trailing_zeros }}
+              </option>
+            {%- endfor -%}
+          </select>
+
+        {%- endif -%}
+
+
+        {%- if can_personalize -%}
+
+          <div class="card-purchase-options">
+
+            <p class="eyebrow">
+              CHOOSE YOUR CARD
+            </p>
+
+            <label class="card-purchase-option selected">
+
+              <input
+                type="radio"
+                name="mode"
+                value="as-is"
+                checked
+              >
+
+              <span>
+                <strong>BUY AS-IS</strong>
+                <small>
+                  Get the card exactly as shown.
+                </small>
+              </span>
+
+              <span class="purchase-option-indicator">
+                ●
+              </span>
+
+            </label>
+
+
+            <label class="card-purchase-option">
+
+              <input
+                type="radio"
+                name="mode"
+                value="personalized"
+              >
+
+              <span>
+                <strong>CUSTOMIZE IT</strong>
+                <small>
+                  Add your own photo to the card.
+                </small>
+              </span>
+
+              <span class="purchase-option-indicator">
+                ○
+              </span>
+
+            </label>
+
+          </div>
+
+
+          <div
+            class="customize-panel"
+            data-personalize
+          >
+
+            <label
+              class="field-label"
+              for="card-name"
+            >
+              NAME TO PRINT
+            </label>
+
+            <input
+              id="card-name"
+              type="text"
+              data-card-name
+              maxlength="40"
+              placeholder="Enter the name for your card..."
+              autocomplete="name"
+            >
+
+
+            <p class="field-label">
+              YOUR PHOTO
+            </p>
+
+
+            <label
+              class="dz"
+              data-dropzone
+            >
+
+              <input
+                type="file"
+                data-photo
+                accept="image/jpeg,image/png,image/webp"
+              >
+
+
+              <span class="dz-empty">
+
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="square"
+                  aria-hidden="true"
+                >
+                  <path d="M12 16V4M6 10l6-6 6 6M4 20h16"/>
+                </svg>
+
+                <strong>
+                  CLICK TO UPLOAD
+                </strong>
+
+                <small>
+                  or drag a photo here. JPG, PNG or WEBP.
+                </small>
+
+              </span>
+
+
+              <span class="dz-filled">
+
+                <img
+                  data-dz-thumb
+                  alt=""
+                >
+
+                <span>
+
+                  <strong data-dz-name></strong>
+
+                  <small>
+                    CLICK TO CHANGE
+                  </small>
+
+                </span>
+
+              </span>
+
+            </label>
+
+
+            <button
+              type="button"
+              class="dz-remove"
+              data-dz-remove
+            >
+              REMOVE PHOTO
+            </button>
+
+
+            <label
+              class="field-label"
+              for="print-notes"
+            >
+              PRINT NOTES (OPTIONAL)
+            </label>
+
+            <textarea
+              id="print-notes"
+              data-print-notes
+              maxlength="500"
+              placeholder="Anything we should know before printing..."
+            ></textarea>
+
+          </div>
+
+        {%- endif -%}
+
+
+        <div class="qty-picker">
+
+          <span
+            class="eyebrow"
+            style="margin:0"
+          >
+            QUANTITY
+          </span>
+
+          <div class="qty-box">
+
+            <button
+              type="button"
+              data-qty-step="-1"
+              aria-label="Decrease quantity"
+            >
+              −
+            </button>
+
+            <input
+              type="number"
+              name="quantity"
+              value="1"
+              min="1"
+              aria-label="Quantity"
+            >
+
+            <button
+              type="button"
+              data-qty-step="1"
+              aria-label="Increase quantity"
+            >
+              +
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="checkout-button w-full"
+          {% unless v.available %}disabled{% endunless %}
+        >
+
+          {%- if v.available -%}
+            ADD TO BAG ↗
+          {%- else -%}
+            SOLD OUT
+          {%- endif -%}
+
+        </button>
+        <button
+          type="submit"
+          class="checkout-button buy-now-button w-full"
+          data-buy-now
+          {% unless v.available %}disabled{% endunless %}
+        >
+          BUY NOW →
+        </button>
+
+        <p
+          class="form-status"
+          data-form-status
+          role="alert"
+        ></p>
+
+      </form>
+
+    </div>
+
+  </div>
+
+  <!-- =========================================
+       PRODUCT DETAILS ACCORDION (FULL DESKTOP WIDTH)
+       ========================================= -->
+
+  {%- liquid
+    assign ai_gen_id = 'product_accordion'
+    # Metafield keys (namespace "custom") for tabs 1, 2 and 3, in order
+    assign mf_keys = 'box_contents,info_description,dimensions' | split: ','
+  -%}
+
+  <style>
+    .ai-accordion-{{ ai_gen_id }} {
+      display: block;
+      width: 95%;
+      max-width: 95%;
+      margin: 60px auto 0;
+      color: #111111;
+      font-family: "Space Mono", monospace;
+      text-align: left;
+    }
+
+    .ai-accordion-{{ ai_gen_id }}__title {
+      margin: 0 0 28px;
+      padding: 0;
+      color: #111111;
+      font-family: "Space Mono", monospace;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .ai-accordion-{{ ai_gen_id }}__item {
+      border-top: 2px solid #111111;
+      background: #ffffff;
+      text-align: left;
+    }
+
+    .ai-accordion-{{ ai_gen_id }}__item:last-child {
+      border-bottom: 2px solid #111111;
+    }
+
+    .ai-accordion-{{ ai_gen_id }}__trigger {
+      width: 100%;
+      min-height: 64px;
+      padding: 18px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      border: 0;
+      background: #ffffff;
+      color: #111111;
+      font-family: "Space Mono", monospace;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background-color 120ms ease, color 120ms ease;
+    }
+
+    .ai-accordion-{{ ai_gen_id }}__trigger:hover {
+      background: rgba(14, 14, 14, 0.05);
+      color: #111111;
+    }
+
+    .ai-accordion-{{ ai_gen_id }}__chevron {
+      position: relative;
+      width: 18px;
+      height: 18px;
+      flex: 0 0 18px;
+      border: 2px solid #111111;
+      background: #ffffff;
+    }
+
+    .ai-accordion-{{ ai_gen_id }}__chevron::before,
+    .ai-accordion-{{ ai_gen_id }}__chevron::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 8px;
+      height: 2px;
+      background: #111111;
+      transform: translate(-50%, -50%);
+    }
+
+    .ai-accordion-{{ ai_gen_id }}__chevron::after {
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    .ai-accordion-{{ ai_gen_id }}__trigger[aria-expanded="true"] {
+      background: rgba(14, 14, 14, 0.05);
+      color: #111111;
+    }
+
+    .ai-accordion-{{ ai_gen_id }}__trigger[aria-expanded="true"] .ai-accordion-{{ ai_gen_id }}__chevron {
+      background: #111111;
+    }
+
+    .ai-accordion-{{ ai_gen_id }}__trigger[aria-expanded="true"] .ai-accordion-{{ ai_gen_id }}__chevron::before,
+    .ai-accordion-{{ ai_gen_id }}__trigger[aria-expanded="true"] .ai-accordion-{{ ai_gen_id }}__chevron::after {
+      background: #ffffff;
+    }
+
+    .ai-accordion-{{ ai_gen_id }}__trigger[aria-expanded="true"] .ai-accordion-{{ ai_gen_id }}__chevron::after {
+      display: none;
+    }
+
+    .ai-accordion-{{ ai_gen_id }}__panel {
+      padding: 20px 16px 24px;
+      background: #ffffff;
+      color: #111111;
+      font-family: "Space Mono", monospace;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    .ai-accordion-{{ ai_gen_id }}__panel p {
+      margin: 0 0 12px;
+    }
+
+    .ai-accordion-{{ ai_gen_id }}__panel p:last-child {
+      margin-bottom: 0;
+    }
+
+    .ai-accordion-{{ ai_gen_id }}__panel ul,
+    .ai-accordion-{{ ai_gen_id }}__panel ol {
+      margin: 0 0 12px;
+      padding-left: 22px;
+    }
+
+    .ai-accordion-{{ ai_gen_id }}__panel li {
+      margin-bottom: 6px;
+    }
+
+    .ai-accordion-{{ ai_gen_id }}__panel a {
+      color: #111111;
+      font-weight: 700;
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+
+    .ai-accordion-{{ ai_gen_id }}__panel a:hover {
+      background: rgba(14, 14, 14, 0.05);
+      text-decoration: none;
+    }
+  </style>
+
+  <single-open-accordion-{{ ai_gen_id }} class="ai-accordion-{{ ai_gen_id }}">
+    <h2 class="ai-accordion-{{ ai_gen_id }}__title">
+      ABOUT THIS PRODUCT
+    </h2>
+
+    {%- for i in (1..5) -%}
+      {%- liquid
+        assign item_content = ''
+        
+        if i == 1
+          assign item_label = "What's in the box?"
+          assign mf_key = mf_keys[0]
+        elsif i == 2
+          assign item_label = "Description"
+          assign mf_key = mf_keys[1]
+        elsif i == 3
+          assign item_label = "Dimensions"
+          assign mf_key = mf_keys[2]
+        elsif i == 4
+          assign item_label = "Returns & refunds"
+          assign item_content = '<p>Returns accepted only for damaged, defective, or incorrect products reported within 48 hours of delivery, with an unboxing video required for damage claims. No change-of-mind returns; personalized orders cannot be cancelled once production begins.</p><p><a href="/policies/refund-policy">Read the full policy →</a></p>'
+        elsif i == 5
+          assign item_label = "Shipping policy"
+          assign item_content = '<p>We offer free shipping on orders above ₹499; otherwise, a standard shipping fee of ₹119 applies. Orders are processed within 1–3 business days and delivered within approximately 3–7 business days after dispatch.</p><p><a href="/policies/shipping-policy">Read the full policy →</a></p>'
+        endif
+
+        if i <= 3
+          assign rendered = product.metafields.custom[mf_key] | metafield_tag
+          if rendered != blank
+            assign item_content = rendered
+          else
+            for c in product.collections
+              assign rendered = c.metafields.custom[mf_key] | metafield_tag
+              if rendered != blank
+                assign item_content = rendered
+                break
+              endif
+            endfor
+          endif
+        endif
+      -%}
+
+      {%- if item_label != blank and item_content != blank -%}
+        <div class="ai-accordion-{{ ai_gen_id }}__item">
+          <button
+            class="ai-accordion-{{ ai_gen_id }}__trigger"
+            type="button"
+            aria-expanded="false"
+            aria-controls="ai-accordion-panel-{{ ai_gen_id }}-{{ i }}"
+            id="ai-accordion-trigger-{{ ai_gen_id }}-{{ i }}"
+          >
+            <span>{{ item_label }}</span>
+            <span class="ai-accordion-{{ ai_gen_id }}__chevron" aria-hidden="true"></span>
+          </button>
+
+          <div
+            class="ai-accordion-{{ ai_gen_id }}__panel"
+            id="ai-accordion-panel-{{ ai_gen_id }}-{{ i }}"
+            role="region"
+            aria-labelledby="ai-accordion-trigger-{{ ai_gen_id }}-{{ i }}"
+            hidden
+          >
+            {{ item_content }}
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </single-open-accordion-{{ ai_gen_id }}>
+
+  <script>
+    (function() {
+      const tagName = 'single-open-accordion-{{ ai_gen_id }}';
+      if (customElements.get(tagName)) return;
+
+      class SingleOpenAccordion extends HTMLElement {
+        connectedCallback() {
+          this.addEventListener('click', (event) => {
+            const button = event.target.closest('.ai-accordion-{{ ai_gen_id }}__trigger');
+            if (!button || !this.contains(button)) return;
+
+            const panel = this.querySelector('#' + CSS.escape(button.getAttribute('aria-controls')));
+            const opening = button.getAttribute('aria-expanded') !== 'true';
+
+            this.querySelectorAll('.ai-accordion-{{ ai_gen_id }}__trigger').forEach((trigger) => {
+              trigger.setAttribute('aria-expanded', 'false');
+              const target = this.querySelector('#' + CSS.escape(trigger.getAttribute('aria-controls')));
+              if (target) target.hidden = true;
+            });
+
+            if (opening && panel) {
+              button.setAttribute('aria-expanded', 'true');
+              panel.hidden = false;
+            }
+          });
+        }
+      }
+
+      customElements.define(tagName, SingleOpenAccordion);
+    })();
+  </script>
+
+</div>
+
+
+<!-- =========================================
+     IMAGE LIGHTBOX
+     ========================================= -->
+
+<div
+  class="image-lightbox"
+  data-image-lightbox
+  aria-hidden="true"
+>
+
+  <div
+    class="image-lightbox-backdrop"
+    data-lightbox-close
+  ></div>
+
+
+  <div class="image-lightbox-content">
+
+    <button
+      type="button"
+      class="image-lightbox-close"
+      data-lightbox-close
+      aria-label="Close image preview"
+    >
+      ×
+    </button>
+
+
+    <img
+      src=""
+      alt=""
+      data-lightbox-image
+    >
+
+  </div>
+
+</div>
+
+
+
+<script>
+  (function () {
+    var buyNow = false;
+    var timer;
+
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-add-form] button[type="submit"]');
+      if (!btn) return;
+      buyNow = btn.hasAttribute('data-buy-now');
+      clearTimeout(timer);
+      if (buyNow) timer = setTimeout(function () { buyNow = false; }, 15000);
+    }, true);
+
+    var originalFetch = window.fetch;
+    window.fetch = function () {
+      var url = String(arguments[0] && arguments[0].url || arguments[0] || '');
+      var p = originalFetch.apply(this, arguments);
+      if (buyNow && url.indexOf('/cart/add') > -1) {
+        p.then(function (res) {
+          if (res.ok) {
+            buyNow = false;
+            window.location.href = '/checkout';
+          } else {
+            buyNow = false;
+          }
+        }).catch(function () { buyNow = false; });
+      }
+      return p;
+    };
+  })();
+</script>
+<!-- =========================================
+     IMAGE LIGHTBOX JAVASCRIPT
+     ========================================= -->
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+
+    const gallery = document.querySelector('[data-gallery]');
+    const lightbox = document.querySelector('[data-image-lightbox]');
+    const lightboxImage = document.querySelector('[data-lightbox-image]');
+    const previewButton = document.querySelector('[data-image-preview]');
+
+    if (!gallery || !lightbox || !lightboxImage || !previewButton) {
+      return;
+    }
+
+
+    function openLightbox() {
+
+      const mainImage = gallery.querySelector('[data-gallery-main]');
+
+      if (!mainImage) {
+        return;
+      }
+
+      lightboxImage.src =
+        mainImage.currentSrc ||
+        mainImage.src;
+
+      lightboxImage.alt =
+        mainImage.alt || '';
+
+
+      lightbox.classList.add('is-open');
+
+      lightbox.setAttribute(
+        'aria-hidden',
+        'false'
+      );
+
+
+      document.body.style.overflow = 'hidden';
+
+    }
+
+
+    function closeLightbox() {
+
+      lightbox.classList.remove('is-open');
+
+      lightbox.setAttribute(
+        'aria-hidden',
+        'true'
+      );
+
+
+      lightboxImage.src = '';
+
+      document.body.style.overflow = '';
+
+    }
+
+
+    previewButton.addEventListener(
+      'click',
+      openLightbox
+    );
+
+
+    lightbox
+      .querySelectorAll('[data-lightbox-close]')
+      .forEach(function (element) {
+
+        element.addEventListener(
+          'click',
+          closeLightbox
+        );
+
+      });
+
+
+    document.addEventListener(
+      'keydown',
+      function (event) {
+
+        if (
+          event.key === 'Escape' &&
+          lightbox.classList.contains('is-open')
+        ) {
+          closeLightbox();
+        }
+
+      }
+    );
+
+  });
+</script>
+
+
+<!-- =========================================
+     IMAGE LIGHTBOX CSS
+     ========================================= -->
+
+<style>
+
+  /* -----------------------------------------
+     CLICKABLE PRODUCT IMAGE
+     ----------------------------------------- */
+
+  .gallery-image-button {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: zoom-in;
+    text-align: left;
+  }
+
+
+  .gallery-image-button img {
+    display: block;
+    width: 100%;
+  }
+
+
+  .image-zoom-hint {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+
+    padding: 7px 10px;
+
+    background: #000;
+    color: #fff;
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .08em;
+
+    opacity: 0;
+    transform: translateY(4px);
+
+    transition:
+      opacity .2s ease,
+      transform .2s ease;
+
+    pointer-events: none;
+  }
+
+
+  .gallery-image-button:hover .image-zoom-hint {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+
+  /* -----------------------------------------
+     LIGHTBOX
+     ----------------------------------------- */
+
+  .image-lightbox {
+    position: fixed;
+    inset: 0;
+
+    z-index: 9999;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  .image-lightbox.is-open {
+    display: flex;
+  }
+
+
+  .image-lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(0, 0, 0, .88);
+
+    cursor: zoom-out;
+  }
+
+
+  .image-lightbox-content {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: min(94vw, 1400px);
+    height: min(94vh, 1000px);
+
+    pointer-events: none;
+  }
+
+
+  .image-lightbox-content img {
+    display: block;
+
+    max-width: 100%;
+    max-height: 94vh;
+
+    width: auto;
+    height: auto;
+
+    object-fit: contain;
+
+    pointer-events: auto;
+  }
+
+
+  /* -----------------------------------------
+     CLOSE BUTTON
+     ----------------------------------------- */
+
+  .image-lightbox-close {
+    position: absolute;
+
+    top: 0;
+    right: 0;
+
+    z-index: 2;
+
+    width: 44px;
+    height: 44px;
+
+    border: 0;
+
+    background: #fff;
+    color: #000;
+
+    font-size: 32px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    pointer-events: auto;
+  }
+
+
+  .image-lightbox-close:hover {
+    background: #000;
+    color: #fff;
+  }
+
+
+  /* -----------------------------------------
+     MOBILE
+     ----------------------------------------- */
+
+  @media (max-width: 749px) {
+
+    .image-lightbox-content {
+      width: 94vw;
+      height: 90vh;
+    }
+
+
+    .image-lightbox-content img {
+      max-width: 94vw;
+      max-height: 88vh;
+    }
+
+
+    .image-lightbox-close {
+      top: 8px;
+      right: 8px;
+    }
+
+
+    .image-zoom-hint {
+      opacity: 1;
+      transform: none;
+    }
+
+  }
+
+  /* Remove black frame from main product image */
+  .product-gallery .gallery-main,
+  .product-gallery .card-gallery-main {
+    border: none;
+    background: transparent;
+    transform: none;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14);
+  }
+
+  /* Buy Now button */
+  .buy-now-button {
+    background: var(--yellow);
+    color: var(--foreground);
+    margin-top: 12px;
+  }
+
+</style>
+
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": []
+}
+{% endschema %}

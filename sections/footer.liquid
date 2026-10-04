@@ -1,0 +1,24 @@
+<footer>
+  <a href="{{ routes.root_url }}" class="wordmark">
+    {%- if section.settings.logo -%}
+      {{ section.settings.logo | image_url: width: 300 | image_tag: alt: shop.name, loading: 'lazy' }}
+    {%- else -%}
+      {{ shop.name }}
+    {%- endif -%}
+  </a>
+
+  <p>© {{ 'now' | date: '%Y' }} {{ shop.name | upcase }}. ALL RIGHTS RESERVED.</p>
+
+  <div>
+    <a href="{{ routes.contact_url }}">CONTACT</a>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" }
+  ]
+}
+{% endschema %}

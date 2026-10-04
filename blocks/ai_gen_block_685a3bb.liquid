@@ -1,0 +1,175 @@
+{% doc %}
+  @prompt
+    Keeping the theme consistent, need to create a related product section here with the title `Others Also Bought` (please keep it customizable)
+    
+    here we can render 4 more products  different from the current one but carrying the same tag or belonging to the same collection, make the section width center aligned instead of left aligned
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-related-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin-inline: auto;
+    color: {{ block.settings.text_color }};
+    padding: {{ block.settings.section_padding }}px 0;
+  }
+
+  .ai-related-{{ ai_gen_id }}__heading {
+    margin: 0 0 20px;
+    color: {{ block.settings.text_color }};
+    font-size: clamp(1.5rem, 3vw, {{ block.settings.heading_size }}px);
+    line-height: 1.05;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+  }
+
+  .ai-related-{{ ai_gen_id }}__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .ai-related-{{ ai_gen_id }}__card {
+    display: block;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .ai-related-{{ ai_gen_id }}__image-wrap {
+    display: block;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #f1f1f1;
+    border: 1px solid {{ block.settings.border_color }};
+  }
+
+  .ai-related-{{ ai_gen_id }}__image-wrap img,
+  .ai-related-{{ ai_gen_id }}__image-wrap svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-related-{{ ai_gen_id }}__details {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 10px;
+  }
+
+  .ai-related-{{ ai_gen_id }}__title {
+    margin: 0;
+    color: {{ block.settings.text_color }};
+    font-size: 14px;
+    line-height: 1.3;
+    font-weight: 600;
+  }
+
+  .ai-related-{{ ai_gen_id }}__price {
+    color: {{ block.settings.text_color }};
+    font-size: 13px;
+  }
+
+  .ai-related-{{ ai_gen_id }}__empty {
+    padding: 18px;
+    border: 1px dashed {{ block.settings.border_color }};
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-related-{{ ai_gen_id }}__card:focus-visible {
+    outline: 2px solid {{ block.settings.text_color }};
+    outline-offset: 4px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-related-{{ ai_gen_id }}__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px 12px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-related-{{ ai_gen_id }}" style="width: {{ block.settings.desktop_width_percent }}%;" {{ block.shopify_attributes }}>
+  {% if block.settings.heading != blank %}
+    <h2 class="ai-related-{{ ai_gen_id }}__heading">{{ block.settings.heading | escape }}</h2>
+  {% endif %}
+
+  {% assign related_collection = block.settings.source_collection %}
+  {% assign related_count = 0 %}
+  {% if related_collection != blank and product != blank %}
+    <div class="ai-related-{{ ai_gen_id }}__grid">
+      {% for related_product in related_collection.products limit: 50 %}
+        {% if related_count >= 4 %}{% break %}{% endif %}
+        {% assign include_product = false %}
+        {% if related_product.id != product.id %}
+          {% if block.settings.match_type == 'collection' %}
+            {% assign include_product = true %}
+          {% else %}
+            {% for current_tag in product.tags %}
+              {% if related_product.tags contains current_tag %}
+                {% assign include_product = true %}
+                {% break %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endif %}
+        {% if include_product %}
+          {% assign related_count = related_count | plus: 1 %}
+          <a class="ai-related-{{ ai_gen_id }}__card" href="{{ related_product.url }}" aria-label="{{ related_product.title | escape }}">
+            <span class="ai-related-{{ ai_gen_id }}__image-wrap">
+              {% if related_product.featured_image %}
+                <img src="{{ related_product.featured_image | image_url: width: 700 }}" alt="{{ related_product.featured_image.alt | default: related_product.title | escape }}" loading="lazy" width="700" height="700">
+              {% else %}
+                {{ 'product-apparel-1' | placeholder_svg_tag }}
+              {% endif %}
+            </span>
+            <span class="ai-related-{{ ai_gen_id }}__details">
+              <span class="ai-related-{{ ai_gen_id }}__title">{{ related_product.title | escape }}</span>
+              <span class="ai-related-{{ ai_gen_id }}__price">{{ related_product.price | money }}</span>
+            </span>
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% if related_count == 0 %}
+      <div class="ai-related-{{ ai_gen_id }}__empty">No related products found. Choose a collection containing matching products.</div>
+    {% endif %}
+  {% else %}
+    <div class="ai-related-{{ ai_gen_id }}__empty">Choose a collection to show related products.</div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Related products",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Others Also Bought" },
+    { "type": "collection", "id": "source_collection", "label": "Product source collection" },
+    {
+      "type": "select",
+      "id": "match_type",
+      "label": "Related product rule",
+      "options": [
+        { "value": "collection", "label": "All products in collection" },
+        { "value": "tag", "label": "Share a tag with current product" }
+      ],
+      "default": "collection"
+    },
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "range", "id": "heading_size", "label": "Heading size", "min": 20, "max": 48, "step": 2, "unit": "px", "default": 30 },
+    { "type": "range", "id": "section_padding", "label": "Vertical spacing", "min": 0, "max": 60, "step": 5, "unit": "px", "default": 20 },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#333333" },
+    { "type": "color", "id": "border_color", "label": "Borders", "default": "#333333" }
+  ],
+  "presets": [
+    { "name": "Related products" }
+  ],
+  "tag": null,
+  "class": "related-products-block"
+}
+{% endschema %}

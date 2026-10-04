@@ -1,0 +1,58 @@
+<div class="cart-items">
+  {% if cart.item_count == 0 %}
+    <div class="empty-cart">
+      <p>YOUR BAG IS AS EMPTY AS THE VOID.</p>
+      <a href="{{ routes.all_products_collection_url }}" class="comic-button">GO FILL IT</a>
+    </div>
+  {% else %}
+    {% for item in cart.items %}
+      <div class="cart-item">
+        <div class="mini-art">
+          {% if item.image %}
+            <img
+              src="{{ item.image | image_url: width: 240 }}"
+              alt="{{ item.product.title | escape }}"
+              width="120"
+              height="120"
+            >
+          {% endif %}
+        </div>
+
+        <div class="cart-item-info">
+          <b>{{ item.product.title }}</b>
+
+          {% if item.properties != empty %}
+            {% for property in item.properties %}
+              {% unless property.last == blank %}
+                <p>{{ property.first }}: {{ property.last }}</p>
+              {% endunless %}
+            {% endfor %}
+          {% endif %}
+
+          <p>{{ item.final_line_price | money }}</p>
+
+          <div class="cart-quantity">
+            <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}">−</a>
+            <span>{{ item.quantity }}</span>
+            <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}">+</a>
+          </div>
+        </div>
+
+        <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0" aria-label="Remove {{ item.product.title }}">×</a>
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>
+
+{% if cart.item_count > 0 %}
+  <div class="drawer-footer">
+    <div class="drawer-total">
+      <span>TOTAL</span>
+      <span>{{ cart.total_price | money }}</span>
+    </div>
+
+    <a href="{{ routes.checkout }}" class="checkout-button w-full">
+      PROCEED TO CHECKOUT <span>↗</span>
+    </a>
+  </div>
+{% endif %}

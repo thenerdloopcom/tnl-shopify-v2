@@ -1,0 +1,389 @@
+{% doc %}
+  Judge.me review widget — TheNerdLoop styling.
+  Self-contained section; no tnl.css changes.
+  Requires the Judge.me app embed to be enabled.
+  Typography: Anton + JetBrains Mono.
+  Colours: TNL brand palette.
+{% enddoc %}
+
+{% style %}
+  /* ==========================================
+     TNL DESIGN TOKENS
+  ========================================== */
+
+  .tnl-jm {
+    --y: #ffffff;
+    --k: var(--foreground, #050505);
+    --b: #0E0E0E;
+    --rd: #0E0E0E;
+    --grey: #414141;
+    --line: #bbb;
+
+    padding: 0 5vw 60px;
+    color: var(--k);
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ==========================================
+     BASE WIDGET
+  ========================================== */
+
+  .tnl-jm .jdgm-widget {
+    --jdgm-star-color: #FC0301;
+    width: 100%;
+    color: var(--k);
+    font-family: 'JetBrains Mono', monospace !important;
+  }
+
+  .tnl-jm .jdgm-rev-widg {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--k);
+    font-family: 'JetBrains Mono', monospace !important;
+  }
+
+  /* Default typography */
+  .tnl-jm .jdgm-rev-widg * {
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ==========================================
+     SECTION HEADING
+  ========================================== */
+
+  .tnl-jm .jdgm-rev-widg__title {
+    margin: 0 0 24px !important;
+    color: var(--k) !important;
+    font-family: var(--font-anton, 'Anton'), Impact, sans-serif !important;
+    font-size: clamp(36px, 5vw, 64px) !important;
+    font-weight: 400 !important;
+    line-height: 1 !important;
+    letter-spacing: -.03em !important;
+    text-align: left !important;
+    text-transform: uppercase;
+  }
+
+  /* ==========================================
+     STAR RATINGS
+  ========================================== */
+
+  .tnl-jm .jdgm-star,
+  .tnl-jm .jdgm-rev__rating .jdgm-star,
+  .tnl-jm .jdgm-rev-widg__summary-stars .jdgm-star {
+    color: var(--b) !important;
+  }
+
+  .tnl-jm .jdgm-widget {
+    --jdgm-star-color: #FC0301;
+  }
+
+  /* ==========================================
+     RATING SUMMARY
+  ========================================== */
+
+  .tnl-jm .jdgm-rev-widg__summary-average {
+    color: var(--k) !important;
+    font-family: var(--font-anton, 'Anton'), Impact, sans-serif !important;
+    font-size: 36px !important;
+    font-weight: 400 !important;
+    line-height: 1 !important;
+    letter-spacing: -.02em;
+  }
+
+  .tnl-jm .jdgm-rev-widg__summary-text {
+    color: var(--k) !important;
+    font: 700 12px 'JetBrains Mono', monospace !important;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+
+  .tnl-jm .jdgm-rev-widg__summary-stars {
+    margin: 4px 0;
+  }
+
+  /* ==========================================
+     HISTOGRAM
+  ========================================== */
+
+  .tnl-jm .jdgm-histogram__bar {
+    height: 14px;
+    border: 2px solid var(--k);
+    border-radius: 0 !important;
+    background: #fff !important;
+  }
+
+  .tnl-jm .jdgm-histogram__bar-content {
+    border-radius: 0 !important;
+    background: var(--y) !important;
+  }
+
+  .tnl-jm .jdgm-histogram__frequency {
+    color: var(--k) !important;
+    font: 700 11px 'JetBrains Mono', monospace !important;
+  }
+
+  /* ==========================================
+     WRITE REVIEW BUTTON
+  ========================================== */
+
+  .tnl-jm .jdgm-write-rev-link,
+  .tnl-jm .jdgm-write-rev-link.jdgm-write-rev-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 19px;
+
+    border: 2px solid var(--k) !important;
+    border-radius: 0 !important;
+
+    background: var(--rd) !important;
+    box-shadow: none;
+
+    color: #fff !important;
+    font: 700 12px 'JetBrains Mono', monospace !important;
+
+    letter-spacing: .02em;
+    text-decoration: none;
+    text-transform: uppercase;
+
+    transition: transform .15s, box-shadow .15s, background .15s;
+  }
+
+  .tnl-jm .jdgm-write-rev-link:hover {
+    transform: translate(3px, 3px);
+    box-shadow: none;
+    background: var(--b) !important;
+  }
+
+  /* ==========================================
+     SORT DROPDOWN
+  ========================================== */
+
+  .tnl-jm .jdgm-rev-widg__sort-wrapper,
+  .tnl-jm .jdgm-sort-dropdown {
+    color: var(--k) !important;
+    font: 700 11px 'JetBrains Mono', monospace !important;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .tnl-jm .jdgm-sort-dropdown {
+    border: 2px solid var(--k) !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+  }
+
+  /* ==========================================
+     REVIEW LIST
+  ========================================== */
+
+  .tnl-jm .jdgm-rev {
+    margin: 0;
+    padding: 24px 0;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* Reviewer name */
+
+  .tnl-jm .jdgm-rev__author {
+    color: var(--k) !important;
+    font-family: var(--font-anton, 'Anton'), Impact, sans-serif !important;
+    font-size: 17px !important;
+    font-weight: 400 !important;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  /* Review date */
+
+  .tnl-jm .jdgm-rev__timestamp {
+    color: var(--grey) !important;
+    font: 11px 'JetBrains Mono', monospace !important;
+  }
+
+  /* Reviewer avatar */
+
+  .tnl-jm .jdgm-rev__icon {
+    border: 2px solid var(--k);
+    border-radius: 0 !important;
+    background: var(--y) !important;
+  }
+
+  /* Verified buyer badge */
+
+  .tnl-jm .jdgm-rev__buyer-badge {
+    padding: 3px 7px;
+    border-radius: 0 !important;
+    background: var(--b) !important;
+    color: #fff !important;
+    font: 700 9px 'JetBrains Mono', monospace !important;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  /* Review title */
+
+  .tnl-jm .jdgm-rev__title {
+    margin: 12px 0 8px;
+    color: var(--k) !important;
+    font-family: var(--font-anton, 'Anton'), Impact, sans-serif !important;
+    font-size: 20px !important;
+    font-weight: 400 !important;
+    line-height: 1.2 !important;
+    letter-spacing: -.02em;
+    text-transform: uppercase;
+  }
+
+  /* Review body */
+
+  .tnl-jm .jdgm-rev__body,
+  .tnl-jm .jdgm-rev__body p {
+    max-width: 70ch;
+    color: var(--k) !important;
+    font: 400 13px/1.8 'JetBrains Mono', monospace !important;
+  }
+
+  /* Review images */
+
+  .tnl-jm .jdgm-rev__pic-img,
+  .tnl-jm .jdgm-rev__pics img {
+    border: 2px solid var(--k);
+    border-radius: 0 !important;
+  }
+
+  /* ==========================================
+     REVIEW FORM
+  ========================================== */
+
+  .tnl-jm .jdgm-form label {
+    color: var(--k) !important;
+    font: 700 12px 'JetBrains Mono', monospace !important;
+  }
+
+  .tnl-jm .jdgm-form input[type='text'],
+  .tnl-jm .jdgm-form input[type='email'],
+  .tnl-jm .jdgm-form textarea,
+  .tnl-jm .jdgm-form select {
+    border: 2px solid var(--k) !important;
+    border-radius: 0 !important;
+    background: #fff;
+    color: var(--k) !important;
+    font: 400 12px 'JetBrains Mono', monospace !important;
+  }
+
+  .tnl-jm .jdgm-form input:focus,
+  .tnl-jm .jdgm-form textarea:focus,
+  .tnl-jm .jdgm-form select:focus {
+    outline: none;
+    background: var(--y) !important;
+    box-shadow: none !important;
+  }
+
+  .tnl-jm .jdgm-submit-rev {
+    padding: 12px 18px;
+    border: 2px solid var(--k) !important;
+    border-radius: 0 !important;
+    background: var(--y) !important;
+    color: var(--k) !important;
+    box-shadow: none;
+    font: 700 12px 'JetBrains Mono', monospace !important;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s, background .15s;
+  }
+
+  .tnl-jm .jdgm-submit-rev:hover {
+    transform: translate(3px, 3px);
+    box-shadow: none;
+    background: var(--rd) !important;
+    color: #fff !important;
+  }
+
+  /* ==========================================
+     MOBILE
+  ========================================== */
+
+  @media screen and (max-width: 749px) {
+    .tnl-jm {
+      padding: 0 5vw 45px;
+    }
+
+    .tnl-jm .jdgm-rev-widg__title {
+      font-size: clamp(34px, 10vw, 48px) !important;
+      margin-bottom: 24px !important;
+    }
+
+    .tnl-jm .jdgm-rev-widg__summary-average {
+      font-size: 30px !important;
+    }
+
+    .tnl-jm .jdgm-rev {
+      padding: 22px 0;
+    }
+
+    .tnl-jm .jdgm-rev__body,
+    .tnl-jm .jdgm-rev__body p {
+      font-size: 12px !important;
+      line-height: 1.7 !important;
+    }
+
+    .tnl-jm .jdgm-write-rev-link {
+      padding: 12px 15px;
+    }
+  }
+{% endstyle %}
+
+<section class="tnl-jm" {{ block.shopify_attributes }}>
+  <!-- Start of Judge.me code -->
+  {% assign has_legacy = false %}
+  {% if product.metafields.judgeme.widget.size > 20 %}
+    {% assign has_legacy = true %}
+  {% endif %}
+
+  <div style="clear:both"></div>
+
+  <div
+    id="judgeme_product_reviews"
+    class="jdgm-widget jdgm-review-widget"
+    data-product-title="{{ product.title | escape }}"
+    data-id="{{ product.id }}"
+    data-product-id="{{ product.id }}"
+    data-widget="review"
+    data-auto-install="false"
+    data-shop-reviews-count="{{ shop.metafields.judgeme.shop_reviews_count | default: 0 | escape }}"
+    data-entry-point="review_widget.js"
+    data-entry-key="review-widget/main.js"
+  >
+    {% if has_legacy %}
+      <div class="jdgm-legacy-widget-content" style="display:none;">
+        {{ product.metafields.judgeme.widget }}
+      </div>
+    {% endif %}
+  </div>
+
+  {% if product.metafields.judgeme.review_widget_data %}
+    <script>
+      jdgm.data ||= {};
+      jdgm.data.reviewWidget ||= {};
+      jdgm.data.reviewWidget[{{ product.id }}] = {{ product.metafields.judgeme.review_widget_data }};
+    </script>
+  {% endif %}
+  <!-- End of Judge.me code -->
+</section>
+
+{% schema %}
+{
+  "name": "Judge.me reviews",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Judge.me reviews"
+    }
+  ],
+  "tag": null
+}
+{% endschema %}

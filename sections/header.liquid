@@ -1,0 +1,201 @@
+<div
+  class="announcement"
+  {% unless section.settings.show_announcement %}style="display:none"{% endunless %}
+  style="background: {{ section.settings.announcement_bg }}; color: {{ section.settings.announcement_color }};"
+>
+  {{ section.settings.announcement }}
+</div>
+
+<header
+  class="site-header"
+  style="
+    background: {{ section.settings.header_bg }};
+    color: {{ section.settings.header_color }};
+    padding: {{ section.settings.header_padding }}px {{ section.settings.horizontal_padding }}px;
+  "
+>
+  <a href="{{ routes.root_url }}" class="wordmark">
+    {%- if section.settings.logo -%}
+      {%- assign logo_style = 'width: ' | append: section.settings.logo_width | append: 'px; height: auto;' -%}
+
+      {{ section.settings.logo
+        | image_url: width: 400
+        | image_tag:
+          alt: shop.name,
+          loading: 'eager',
+          style: logo_style
+      }}
+    {%- else -%}
+      {{ shop.name }}
+    {%- endif -%}
+  </a>
+  <nav style="gap: {{ section.settings.nav_gap }}px;">
+    {%- for link in linklists[section.settings.menu].links -%}
+      <a href="{{ link.url }}"
+         style="font-size: {{ section.settings.nav_font_size }}px;">
+        {{ link.title | upcase }}
+      </a>
+    {%- endfor -%}
+  </nav>
+
+  <div class="header-actions">
+
+    {% if section.settings.show_account %}
+      <a href="{{ routes.account_url }}" aria-label="Account">
+        {{ 'icon-account.svg' | inline_asset_content }}
+      </a>
+    {% endif %}
+
+    {% if section.settings.show_cart %}
+      <a href="{{ routes.cart_url }}" class="bag" aria-label="Open cart" data-cart-open>
+        {{ 'icon-cart.svg' | inline_asset_content }}
+        <b data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>
+          {{ cart.item_count }}
+        </b>
+      </a>
+    {% endif %}
+
+    <button type="button" class="mobile-menu" aria-label="Toggle menu"
+      onclick="this.closest('header').querySelector('nav').classList.toggle('nav-open')">
+      ☰
+    </button>
+
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Announcement Bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Show announcement bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "announcement",
+      "label": "Announcement text",
+      "default": "FAN-MADE / SMALL-BATCH / BIG ENERGY"
+    },
+    {
+      "type": "color",
+      "id": "announcement_bg",
+      "label": "Background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "announcement_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo width",
+      "min": 60,
+      "max": 300,
+      "step": 5,
+      "unit": "px",
+      "default": 150
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "range",
+      "id": "nav_font_size",
+      "label": "Navigation font size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "nav_gap",
+      "label": "Navigation spacing",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "header",
+      "content": "Header Appearance"
+    },
+    {
+      "type": "color",
+      "id": "header_bg",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "header_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "header_padding",
+      "label": "Vertical padding",
+      "min": 8,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding",
+      "label": "Horizontal padding",
+      "min": 8,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Header Icons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account",
+      "label": "Show account icon",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart",
+      "label": "Show cart icon",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

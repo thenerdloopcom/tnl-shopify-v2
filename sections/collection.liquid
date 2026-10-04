@@ -1,0 +1,95 @@
+{%- paginate collection.products by 8 -%}
+<div class="route-page">
+  <section class="shop-section shop-page-main">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">THE VAULT</p>
+        <h1 class="shop-page-title">
+          {%- if collection.handle == 'all' -%}
+            SHOP
+          {%- else -%}
+            {{ collection.title | upcase }}
+          {%- endif -%}
+          <span>ALL</span>
+        </h1>
+      </div>
+
+      <span class="font-mono" style="font:11px monospace">
+        {{ collection.products_count }} ITEMS
+      </span>
+    </div>
+
+    <div class="filter-row">
+      <a
+        href="{{ routes.all_products_collection_url }}"
+        {% if collection.handle == 'all' %}class="active"{% endif %}
+      >
+        ALL
+      </a>
+
+      {%- for link in linklists['filter-menu'].links -%}
+        <a
+          href="{{ link.url }}"
+          {% if link.url == collection.url %}class="active"{% endif %}
+        >
+          {{ link.title | upcase }}
+        </a>
+      {%- endfor -%}
+    </div>
+
+    <div class="product-grid">
+      {%- for product in collection.products -%}
+        {% render 'product-card', product: product %}
+      {%- else -%}
+        <div
+          class="empty-shop"
+          style="grid-column:1/-1"
+        >
+          DROPPING SOON IN THE LOOP.
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- if paginate.pages > 1 -%}
+      <nav
+        class="shop-pagination"
+        aria-label="Pagination"
+      >
+        {%- if paginate.previous -%}
+          <a
+            href="{{ paginate.previous.url }}"
+            aria-label="Previous page"
+          >
+            ‹
+          </a>
+        {%- else -%}
+          <a aria-disabled="true">‹</a>
+        {%- endif -%}
+
+        <span>
+          PAGE {{ paginate.current_page }} / {{ paginate.pages }}
+        </span>
+
+        {%- if paginate.next -%}
+          <a
+            href="{{ paginate.next.url }}"
+            aria-label="Next page"
+          >
+            ›
+          </a>
+        {%- else -%}
+          <a aria-disabled="true">›</a>
+        {%- endif -%}
+      </nav>
+    {%- endif -%}
+
+  </section>
+</div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": []
+}
+{% endschema %}

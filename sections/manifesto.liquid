@@ -1,0 +1,18 @@
+<section class="manifesto">
+  <span>{{ section.settings.left }}</span>
+  <p>{{ section.settings.text }} <strong>{{ section.settings.accent }}</strong></p>
+  <span>{{ section.settings.right }}</span>
+</section>
+
+{% schema %}
+{
+  "name": "Manifesto strip",
+  "settings": [
+    { "type": "text", "id": "left", "label": "Left", "default": "THE NERDLOOP" },
+    { "type": "text", "id": "text", "label": "Text", "default": "NOT MERCH." },
+    { "type": "text", "id": "accent", "label": "Accent", "default": "MEMORY." },
+    { "type": "text", "id": "right", "label": "Right", "default": "EST. 2026" }
+  ],
+  "presets": [{ "name": "Manifesto strip" }]
+}
+{% endschema %}

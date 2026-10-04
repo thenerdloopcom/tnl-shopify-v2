@@ -1,0 +1,389 @@
+{% comment %} CONTACT PAGE SECTION — THE NERD LOOP {% endcomment %}
+
+{%- liquid
+  assign eyebrow        = section.settings.eyebrow
+  assign description    = section.settings.description
+  assign heading_line1  = section.settings.heading_line1
+  assign heading_line2  = section.settings.heading_line2
+  assign h1_color       = section.settings.heading_primary_color
+  assign h2_color       = section.settings.heading_accent_color
+  assign email_addr     = section.settings.email_address
+  assign email_label    = section.settings.email_label
+  assign email_bg       = section.settings.email_bg
+  assign email_text     = section.settings.email_text
+  assign ig_url         = section.settings.instagram_url
+  assign ig_label       = section.settings.instagram_label
+  assign ig_bg          = section.settings.instagram_bg
+  assign ig_text        = section.settings.instagram_text
+  assign loc_eyebrow    = section.settings.location_eyebrow
+  assign loc_main       = section.settings.location_main
+  assign loc_sub        = section.settings.location_sub
+  assign loc_bg         = section.settings.location_bg
+  assign loc_text       = section.settings.location_text
+  assign page_bg        = section.settings.page_bg
+  assign body_text      = section.settings.body_text
+  assign muted_text     = section.settings.muted_text
+  assign border_color   = section.settings.border_color
+  assign shadow_color   = section.settings.shadow_color
+  assign max_width      = section.settings.max_width
+  assign col_gap        = section.settings.column_gap
+  assign block_gap      = section.settings.block_gap
+  assign block_height   = section.settings.block_height
+  assign shadow_size    = section.settings.shadow_size
+  assign pad_top        = section.settings.padding_top
+  assign pad_bottom     = section.settings.padding_bottom
+-%}
+
+<section
+  class="tnl-contact"
+  aria-label="Contact The Nerd Loop"
+  style="
+    --contact-page-bg: {{ page_bg }};
+    --contact-body-text: {{ body_text }};
+    --contact-muted: {{ muted_text }};
+    --contact-border: {{ border_color }};
+    --contact-shadow: {{ shadow_color }};
+    --contact-h1: {{ h1_color }};
+    --contact-h2: {{ h2_color }};
+    --contact-email-bg: {{ email_bg }};
+    --contact-email-text: {{ email_text }};
+    --contact-ig-bg: {{ ig_bg }};
+    --contact-ig-text: {{ ig_text }};
+    --contact-loc-bg: {{ loc_bg }};
+    --contact-loc-text: {{ loc_text }};
+    --contact-max-width: {{ max_width }}px;
+    --contact-col-gap: {{ col_gap }}px;
+    --contact-block-gap: {{ block_gap }}px;
+    --contact-block-height: {{ block_height }}px;
+    --contact-shadow-size: {{ shadow_size }}px;
+    --contact-pad-top: {{ pad_top }}px;
+    --contact-pad-bottom: {{ pad_bottom }}px;
+  "
+>
+  <div class="tnl-contact__inner">
+
+    <div class="tnl-contact__grid">
+
+      {%- comment %} LEFT COLUMN {%- endcomment %}
+      <div class="tnl-contact__left">
+        {%- if eyebrow != blank %}
+          <p class="tnl-contact__eyebrow">{{ eyebrow }}</p>
+        {%- endif %}
+
+        <h1 class="tnl-contact__heading" aria-label="{{ heading_line1 }} {{ heading_line2 }}">
+          <span class="tnl-contact__heading-line1">{{ heading_line1 }}</span>
+          <span class="tnl-contact__heading-line2">{{ heading_line2 }}</span>
+        </h1>
+
+        {%- if description != blank %}
+          <p class="tnl-contact__desc">{{ description }}</p>
+        {%- endif %}
+      </div>
+
+      {%- comment %} RIGHT COLUMN {%- endcomment %}
+      <div class="tnl-contact__right">
+
+        {%- comment %} EMAIL BLOCK {%- endcomment %}
+        {%- if email_addr != blank %}
+          <a
+            class="tnl-contact__block tnl-contact__block--email"
+            href="mailto:{{ email_addr }}"
+            aria-label="Send us an email at {{ email_addr }}"
+            {% if section.settings.email_new_tab %}target="_blank" rel="noopener"{% endif %}
+          >
+            <span class="tnl-contact__block-label">{{ email_label }}</span>
+            <span class="tnl-contact__block-arrow" aria-hidden="true">↗</span>
+          </a>
+        {%- endif %}
+
+        {%- comment %} INSTAGRAM BLOCK {%- endcomment %}
+        {%- if ig_url != blank %}
+          <a
+            class="tnl-contact__block tnl-contact__block--instagram"
+            href="{{ ig_url }}"
+            aria-label="Visit us on Instagram"
+            {% if section.settings.instagram_new_tab %}target="_blank" rel="noopener"{% endif %}
+          >
+            <span class="tnl-contact__block-label">{{ ig_label }}</span>
+            <span class="tnl-contact__block-arrow" aria-hidden="true">↗</span>
+          </a>
+        {%- endif %}
+
+        {%- comment %} LOCATION BLOCK {%- endcomment %}
+        <div class="tnl-contact__block tnl-contact__block--location" role="region" aria-label="Our location">
+          {%- if loc_eyebrow != blank %}
+            <p class="tnl-contact__loc-eyebrow">{{ loc_eyebrow }}</p>
+          {%- endif %}
+          {%- if loc_main != blank %}
+            <p class="tnl-contact__loc-main">{{ loc_main }}</p>
+          {%- endif %}
+          {%- if loc_sub != blank %}
+            <p class="tnl-contact__loc-sub">{{ loc_sub }}</p>
+          {%- endif %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact Page",
+  "tag": "section",
+  "class": "tnl-contact-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "THE NERDLOOP / CONTACT"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Questions, collabs, weird ideas, or just want to say hi? We're listening."
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_line1",
+      "label": "Heading line 1",
+      "default": "TALK TO"
+    },
+    {
+      "type": "text",
+      "id": "heading_line2",
+      "label": "Heading line 2",
+      "default": "THE LOOP."
+    },
+    {
+      "type": "color",
+      "id": "heading_primary_color",
+      "label": "Heading line 1 color",
+      "default": "#0E0E0E"
+    },
+    {
+      "type": "color",
+      "id": "heading_accent_color",
+      "label": "Heading line 2 color (accent)",
+      "default": "#FC0301"
+    },
+    {
+      "type": "header",
+      "content": "Email"
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "Email block label",
+      "default": "EMAIL"
+    },
+    {
+      "type": "text",
+      "id": "email_address",
+      "label": "Email address",
+      "info": "Enter just the email address — the mailto: link is generated automatically."
+    },
+    {
+      "type": "color",
+      "id": "email_bg",
+      "label": "Email block background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "email_text",
+      "label": "Email block text",
+      "default": "#0E0E0E"
+    },
+    {
+      "type": "checkbox",
+      "id": "email_new_tab",
+      "label": "Open in new tab",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Instagram"
+    },
+    {
+      "type": "text",
+      "id": "instagram_label",
+      "label": "Instagram block label",
+      "default": "INSTAGRAM"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "color",
+      "id": "instagram_bg",
+      "label": "Instagram block background",
+      "default": "#0E0E0E"
+    },
+    {
+      "type": "color",
+      "id": "instagram_text",
+      "label": "Instagram block text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "checkbox",
+      "id": "instagram_new_tab",
+      "label": "Open in new tab",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Location"
+    },
+    {
+      "type": "text",
+      "id": "location_eyebrow",
+      "label": "Location eyebrow",
+      "default": "WHERE WE LIVE"
+    },
+    {
+      "type": "text",
+      "id": "location_main",
+      "label": "Location main text",
+      "default": "SOMEWHERE IN THE HEARTS OF NERDS / INDIA, OBVIOUSLY."
+    },
+    {
+      "type": "text",
+      "id": "location_sub",
+      "label": "Location supporting text",
+      "default": "No exact coordinates. We're probably online."
+    },
+    {
+      "type": "color",
+      "id": "location_bg",
+      "label": "Location block background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "location_text",
+      "label": "Location block text",
+      "default": "#0E0E0E"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "page_bg",
+      "label": "Page background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "body_text",
+      "label": "Body text",
+      "default": "#0E0E0E"
+    },
+    {
+      "type": "color",
+      "id": "muted_text",
+      "label": "Muted text",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#0E0E0E"
+    },
+    {
+      "type": "color",
+      "id": "shadow_color",
+      "label": "Shadow color",
+      "default": "#0E0E0E"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max content width (px)",
+      "min": 800,
+      "max": 1600,
+      "step": 20,
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "label": "Column gap (px)",
+      "min": 20,
+      "max": 120,
+      "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "block_gap",
+      "label": "Block gap (px)",
+      "min": 8,
+      "max": 40,
+      "step": 2,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "block_height",
+      "label": "Email & Instagram block min height (px)",
+      "min": 50,
+      "max": 120,
+      "step": 2,
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "shadow_size",
+      "label": "Shadow size (px)",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "default": 7
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing (px)",
+      "min": 40,
+      "max": 160,
+      "step": 8,
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing (px)",
+      "min": 40,
+      "max": 160,
+      "step": 8,
+      "default": 96
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact Page"
+    }
+  ]
+}
+{% endschema %}

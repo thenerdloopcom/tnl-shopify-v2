@@ -1,0 +1,85 @@
+<section class="tnl-policy">
+  <div class="tnl-policy__inner">
+
+    <header class="tnl-policy__header">
+      <p class="tnl-policy__eyebrow">
+        {{ section.settings.eyebrow }}
+      </p>
+
+      <h1 class="tnl-policy__title">
+        {{ page.title }}
+      </h1>
+
+      {% if section.settings.intro != blank %}
+        <p class="tnl-policy__intro">
+          {{ section.settings.intro }}
+        </p>
+      {% endif %}
+    </header>
+
+    <div class="tnl-policy__layout">
+
+      <aside class="tnl-policy__sidebar">
+        {% if section.settings.sidebar_title != blank %}
+          <p class="tnl-policy__sidebar-title">
+            {{ section.settings.sidebar_title }}
+          </p>
+        {% endif %}
+
+        <p class="tnl-policy__updated">
+          {{ section.settings.updated_label }}
+          <strong>{{ section.settings.updated_date }}</strong>
+        </p>
+      </aside>
+
+      <main class="tnl-policy__content">
+        {{ page.content }}
+      </main>
+
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Policy page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "THE NERDLOOP / LEGAL"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro",
+      "default": "The important stuff, without the legal maze."
+    },
+    {
+      "type": "text",
+      "id": "sidebar_title",
+      "label": "Sidebar title",
+      "default": "POLICY"
+    },
+    {
+      "type": "text",
+      "id": "updated_label",
+      "label": "Updated label",
+      "default": "LAST UPDATED"
+    },
+    {
+      "type": "text",
+      "id": "updated_date",
+      "label": "Updated date",
+      "default": "25 SEPTEMBER 2026"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Policy page"
+    }
+  ]
+}
+{% endschema %}

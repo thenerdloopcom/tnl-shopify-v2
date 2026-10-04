@@ -1,0 +1,164 @@
+{% doc %}
+  @prompt
+    Create a section were we use collapsible dropdowns answering several questions related to the product
+    These sections are to be customizable and extensible so tomorrow i can come and add a heading of the expandible dropdown section and paragraph content inside it, Looks good maybe we can also add a title to this section (also make it customizable);  make the block center aligned with respect to the vertical axis of the page and i dont see how can i add more of these sections? also at one time only one section can expand rest all have to stay collapsed
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-product-faq-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin-inline: auto;
+    color: #222222;
+  }
+
+  .ai-product-faq__heading-{{ ai_gen_id }} {
+    margin: 0 0 18px;
+    color: #222222;
+    text-align: center;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    line-height: 1.15;
+    font-weight: 800;
+  }
+
+  .ai-product-faq__item-{{ ai_gen_id }} {
+    border-top: 1px solid #222222;
+  }
+
+  .ai-product-faq__item-{{ ai_gen_id }}:last-child {
+    border-bottom: 1px solid #222222;
+  }
+
+  .ai-product-faq__summary-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 0;
+    color: #222222;
+    cursor: pointer;
+    font-weight: 700;
+    list-style: none;
+  }
+
+  .ai-product-faq__summary-{{ ai_gen_id }}::-webkit-details-marker {
+    display: none;
+  }
+
+  .ai-product-faq__summary-{{ ai_gen_id }}:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+  }
+
+  .ai-product-faq__icon-{{ ai_gen_id }} {
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    position: relative;
+  }
+
+  .ai-product-faq__icon-{{ ai_gen_id }}::before,
+  .ai-product-faq__icon-{{ ai_gen_id }}::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 14px;
+    height: 2px;
+    background: currentColor;
+    transform: translate(-50%, -50%);
+  }
+
+  .ai-product-faq__icon-{{ ai_gen_id }}::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  .ai-product-faq__item-{{ ai_gen_id }}[open] .ai-product-faq__icon-{{ ai_gen_id }}::after {
+    display: none;
+  }
+
+  .ai-product-faq__content-{{ ai_gen_id }} {
+    padding: 0 34px 18px 0;
+    line-height: 1.6;
+  }
+
+  .ai-product-faq__content-{{ ai_gen_id }} p:first-child {
+    margin-top: 0;
+  }
+
+  .ai-product-faq__content-{{ ai_gen_id }} p:last-child {
+    margin-bottom: 0;
+  }
+{% endstyle %}
+
+<div class="ai-product-faq-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if block.settings.section_title != blank %}
+    <h2 class="ai-product-faq__heading-{{ ai_gen_id }}">{{ block.settings.section_title | escape }}</h2>
+  {% endif %}
+  {% if block.settings.question != blank and block.settings.answer != blank %}
+    <details class="ai-product-faq__item-{{ ai_gen_id }}" name="product-faq-accordion" {% if block.settings.open_by_default %}open{% endif %}>
+      <summary class="ai-product-faq__summary-{{ ai_gen_id }}">
+        <span>{{ block.settings.question | escape }}</span>
+        <span class="ai-product-faq__icon-{{ ai_gen_id }}" aria-hidden="true"></span>
+      </summary>
+      <div class="ai-product-faq__content-{{ ai_gen_id }}">
+        {{ block.settings.answer }}
+      </div>
+    </details>
+  {% elsif request.design_mode %}
+    <div class="ai-product-faq__item-{{ ai_gen_id }}">
+      <div class="ai-product-faq__summary-{{ ai_gen_id }}">Add a question and answer in block settings</div>
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Product FAQ item",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "FAQ heading",
+      "default": "Product questions"
+    },
+    {
+      "type": "text",
+      "id": "question",
+      "label": "Question",
+      "default": "How does this product work?"
+    },
+    {
+      "type": "richtext",
+      "id": "answer",
+      "label": "Answer",
+      "default": "<p>Add your product details here. Add or duplicate FAQ item blocks to create more expandable questions and answers.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_by_default",
+      "label": "Open by default",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product FAQ item"
+    }
+  ],
+  "tag": null,
+  "class": "product-faq-item"
+}
+{% endschema %}

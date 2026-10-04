@@ -1,0 +1,223 @@
+{% doc %}
+  @prompt
+    Generate a footer with background color #FFFFFF
+    At the center should be the brand logo and right below it along the center only add the line `© 2026 The NerdLoop. ALL RIGHTS RESERVED.`
+    
+    And below it, in a single horizontal line at the center in smaller font add the footer menu links
+    
+    text color should be black, on hover menu footer link should become red, no use the inbuilt footer menu links
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-footer-{{ ai_gen_id }} {
+    display: block;
+    box-sizing: border-box;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: {{ block.settings.vertical_padding }}px 20px;
+    background: {{ block.settings.background_color }};
+    color: {{ block.settings.text_color }};
+    text-align: center;
+  }
+
+  .ai-footer-{{ ai_gen_id }}__inner {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .ai-footer-{{ ai_gen_id }}__logo-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+  }
+
+  .ai-footer-{{ ai_gen_id }}__logo {
+    display: block;
+    width: {{ block.settings.logo_width }}px;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .ai-footer-{{ ai_gen_id }}__placeholder {
+    width: {{ block.settings.logo_width }}px;
+    max-width: 100%;
+    aspect-ratio: 3 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-footer-{{ ai_gen_id }}__placeholder svg {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.06);
+  }
+
+  .ai-footer-{{ ai_gen_id }}__copyright {
+    margin: 0;
+    color: {{ block.settings.text_color }};
+    font-size: 12px;
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+  }
+
+  .ai-footer-{{ ai_gen_id }}__links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px 22px;
+    margin-top: 2px;
+  }
+
+  .ai-footer-{{ ai_gen_id }}__link {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.link_font_size }}px;
+    line-height: 1.5;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .ai-footer-{{ ai_gen_id }}__link:hover {
+    color: {{ block.settings.hover_color }};
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .ai-footer-{{ ai_gen_id }}__link:focus-visible,
+  .ai-footer-{{ ai_gen_id }}__logo-link:focus-visible {
+    outline: 2px solid {{ block.settings.text_color }};
+    outline-offset: 4px;
+  }
+
+  @media screen and (max-width: 600px) {
+    .ai-footer-{{ ai_gen_id }} {
+      padding-right: 16px;
+      padding-left: 16px;
+    }
+
+    .ai-footer-{{ ai_gen_id }}__links {
+      column-gap: 16px;
+    }
+  }
+{% endstyle %}
+
+<footer class="ai-footer-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-footer-{{ ai_gen_id }}__inner">
+    {% if block.settings.logo_image != blank %}
+      <a class="ai-footer-{{ ai_gen_id }}__logo-link" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home">
+        <img
+          class="ai-footer-{{ ai_gen_id }}__logo"
+          src="{{ block.settings.logo_image | image_url: width: 700 }}"
+          alt="{{ block.settings.logo_image.alt | default: shop.name | escape }}"
+          width="{{ block.settings.logo_image.width }}"
+          height="{{ block.settings.logo_image.height }}"
+          loading="lazy"
+        >
+      </a>
+    {% else %}
+      <div class="ai-footer-{{ ai_gen_id }}__placeholder" aria-label="Add your brand logo">
+        {{ 'image' | placeholder_svg_tag }}
+      </div>
+    {% endif %}
+
+    <p class="ai-footer-{{ ai_gen_id }}__copyright">© 2026 The NerdLoop. ALL RIGHTS RESERVED.</p>
+
+    {% if block.settings.footer_menu != blank %}
+      <nav class="ai-footer-{{ ai_gen_id }}__links" aria-label="Footer">
+        {% for link in block.settings.footer_menu.links %}
+          <a class="ai-footer-{{ ai_gen_id }}__link" href="{{ link.url }}">{{ link.title | escape }}</a>
+        {% endfor %}
+      </nav>
+    {% endif %}
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Centered brand footer",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Brand logo"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_menu",
+      "label": "Footer menu"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo width",
+      "min": 80,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "default": 180
+    },
+    {
+      "type": "range",
+      "id": "vertical_padding",
+      "label": "Vertical spacing",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#0E0E0E"
+    },
+    {
+      "type": "color",
+      "id": "hover_color",
+      "label": "Link hover",
+      "default": "#FC0301"
+    },
+    {
+      "type": "range",
+      "id": "link_font_size",
+      "label": "Link font size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    }
+  ],
+  "presets": [
+    {
+      "name": "Centered brand footer"
+    }
+  ],
+  "tag": null,
+  "class": "centered-brand-footer"
+}
+{% endschema %}

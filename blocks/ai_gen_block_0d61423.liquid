@@ -1,0 +1,145 @@
+{% doc %}
+  @prompt
+    Create a footer menu block that displays navigation links from a selected link list/menu. Style it to match this footer design: dark/black background, links displayed inline horizontally, uppercase text, small font size, light/white colored text, minimal and clean with no decorative elements. The link should sit on the right side of the footer, matching the existing "CONTACT" style link already present. No borders, no bullets, no hover underlines — just clean uppercase letter-spaced text links.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-footer-menu-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin-left: auto;
+    text-align: right;
+  }
+
+  .ai-footer-menu-{{ ai_gen_id }}__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: {{ block.settings.link_gap }}px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ai-footer-menu-{{ ai_gen_id }}__link {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.font_size }}px;
+    font-weight: 400;
+    letter-spacing: {{ block.settings.letter_spacing }}px;
+    line-height: 1.4;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .ai-footer-menu-{{ ai_gen_id }}__link:hover,
+  .ai-footer-menu-{{ ai_gen_id }}__link:focus-visible {
+    color: {{ block.settings.text_color }};
+    text-decoration: none;
+  }
+
+  .ai-footer-menu-{{ ai_gen_id }}__link:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-footer-menu-{{ ai_gen_id }} {
+      width: 100%;
+    }
+
+    .ai-footer-menu-{{ ai_gen_id }}__list {
+      justify-content: flex-end;
+    }
+  }
+{% endstyle %}
+
+<nav class="ai-footer-menu-{{ ai_gen_id }}" aria-label="{{ block.settings.accessibility_label | escape }}" {{ block.shopify_attributes }}>
+  {% if block.settings.menu != blank and block.settings.menu.links.size > 0 %}
+    <ul class="ai-footer-menu-{{ ai_gen_id }}__list">
+      {% for link in block.settings.menu.links %}
+        <li>
+          <a class="ai-footer-menu-{{ ai_gen_id }}__link" href="{{ link.url }}">{{ link.title | escape }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</nav>
+
+{% schema %}
+{
+  "name": "Footer menu links",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu"
+    },
+    {
+      "type": "text",
+      "id": "accessibility_label",
+      "label": "Accessibility label",
+      "default": "Footer navigation"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 11
+    },
+    {
+      "type": "range",
+      "id": "letter_spacing",
+      "label": "Letter spacing",
+      "min": 0,
+      "max": 4,
+      "step": 0.5,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "link_gap",
+      "label": "Link spacing",
+      "min": 4,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer menu links"
+    }
+  ],
+  "tag": null,
+  "class": "footer-menu-links"
+}
+{% endschema %}

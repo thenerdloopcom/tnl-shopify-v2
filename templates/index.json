@@ -1,0 +1,278 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "DROP 002 / THE FANDOM COLLECTION",
+        "line_1": "GEAR FOR",
+        "line_2": "THE",
+        "line_3": "NERDS.",
+        "description": "Handmade masks, metallic signs, and artifacts for the true fans. Built to last, designed to impress.",
+        "button_label": "SHOP THE DROP",
+        "button_link": "https://thenerdloop.com/collections/all"
+      }
+    },
+    "manifesto": {
+      "type": "manifesto",
+      "settings": {
+        "left": "THE NERDLOOP",
+        "text": "NOT MERCH.",
+        "accent": "MEMORY.",
+        "right": "EST. 2026"
+      }
+    },
+    "categories": {
+      "type": "home-categories",
+      "blocks": {
+        "collection_xUVp9i": {
+          "type": "collection",
+          "settings": {
+            "collection": "metallica"
+          }
+        },
+        "collection_zmcybb": {
+          "type": "collection",
+          "settings": {
+            "collection": "masks"
+          }
+        },
+        "collection_GMa3eq": {
+          "type": "collection",
+          "settings": {
+            "collection": "posters"
+          }
+        },
+        "collection_cXU7aK": {
+          "type": "collection",
+          "settings": {
+            "collection": "access-cards"
+          }
+        }
+      },
+      "block_order": [
+        "collection_xUVp9i",
+        "collection_zmcybb",
+        "collection_GMa3eq",
+        "collection_cXU7aK"
+      ],
+      "settings": {
+        "eyebrow": "EXPLORE BY",
+        "heading": "CATEGORIES",
+        "collections": [
+          "albums",
+          "access-cards",
+          "posters",
+          "wall-stickers",
+          "memeverse",
+          "masks",
+          "metallica",
+          "signage"
+        ],
+        "show_titles": true,
+        "show_view_all": true,
+        "view_all_text": "VIEW ALL ↗",
+        "view_all_url": "https://thenerdloop.com/collections/all",
+        "cols_desktop": "3",
+        "cols_tablet": "3",
+        "cols_mobile": "2",
+        "aspect_ratio": "1 / 1",
+        "gap_desktop": 16,
+        "gap_mobile": 12,
+        "max_width": 1600,
+        "gutter_desktop": 48,
+        "gutter_mobile": 20,
+        "padding_top": 64,
+        "padding_bottom": 64,
+        "padding_top_mobile": 40,
+        "padding_bottom_mobile": 40,
+        "bg_color": "#ffffff",
+        "text_color": "#0e0e0e",
+        "heading_size_desktop": 76,
+        "heading_size_mobile": 40,
+        "title_color": "#0e0e0e",
+        "title_size": 16,
+        "title_spacing": 4,
+        "image_radius": 4,
+        "hover_effect": true
+      }
+    },
+    "vault": {
+      "type": "featured-products",
+      "settings": {
+        "eyebrow": "THE VAULT",
+        "heading": "ALL",
+        "accent": "COLLECTION",
+        "collection": "all",
+        "limit": 12
+      }
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "blocks": {
+        "t1": {
+          "type": "testimonial",
+          "settings": {
+            "image": "shopify://shop_images/Frames.png",
+            "review": "Finally a card that actually looks like it came out of the Loop. Everyone asks where I got it.",
+            "name": "Aarav M.",
+            "location": "Bengaluru",
+            "date": "Sep 2026",
+            "verified": true,
+            "rating": 5,
+            "product": "",
+            "product_name": "",
+            "tag": "",
+            "card_color": "paper"
+          }
+        },
+        "t2": {
+          "type": "testimonial",
+          "settings": {
+            "review": "The mask is stitched so clean. It's now the centrepiece of my shelf.",
+            "name": "Diya K.",
+            "location": "Mumbai",
+            "date": "Sep 2026",
+            "verified": true,
+            "rating": 5,
+            "product": "",
+            "product_name": "",
+            "tag": "",
+            "card_color": "paper"
+          }
+        },
+        "t3": {
+          "type": "testimonial",
+          "settings": {
+            "review": "The metallic sign looks even better on my wall than in the photos.",
+            "name": "Rohan S.",
+            "location": "Delhi",
+            "date": "Aug 2026",
+            "verified": true,
+            "rating": 5,
+            "product": "",
+            "product_name": "",
+            "tag": "",
+            "card_color": "paper"
+          }
+        },
+        "t4": {
+          "type": "testimonial",
+          "settings": {
+            "review": "Posters arrived flat and sharp. Already planning my next order.",
+            "name": "Ishita P.",
+            "location": "Pune",
+            "date": "Aug 2026",
+            "verified": true,
+            "rating": 4,
+            "product": "",
+            "product_name": "",
+            "tag": "",
+            "card_color": "paper"
+          }
+        },
+        "t5": {
+          "type": "testimonial",
+          "settings": {
+            "review": "Real fan energy in every detail. Not merch, actual memory.",
+            "name": "Kabir T.",
+            "location": "Chennai",
+            "date": "Jul 2026",
+            "verified": true,
+            "rating": 5,
+            "product": "",
+            "product_name": "",
+            "tag": "",
+            "card_color": "paper"
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "t5"
+      ],
+      "settings": {
+        "eyebrow": "STRAIGHT FROM THE LOOP",
+        "heading": "REAL PEOPLE.",
+        "accent": "REAL PIECES.",
+        "subheading": "Photos and reviews from the Loop. No stock shots, no filters.",
+        "show_summary": true,
+        "auto_rating": false,
+        "manual_rating": 4.9,
+        "manual_review_count": 5,
+        "reviews_label": "REVIEWS",
+        "show_verified_note": true,
+        "verified_note": "VERIFIED BUYERS",
+        "verified_label": "VERIFIED",
+        "product_label": "GOT:",
+        "show_card_stars": true,
+        "card_width": 400,
+        "card_width_mobile": 82,
+        "card_gap": 18,
+        "image_ratio": "4 / 3",
+        "quote_size": 22,
+        "border_width": 1,
+        "shadow_size": 0,
+        "autoplay": true,
+        "autoplay_delay": 4,
+        "pause_on_hover": true,
+        "show_nav": true,
+        "show_counter": true,
+        "prev_label": "Previous testimonials",
+        "next_label": "Next testimonials",
+        "cta_label": "SHOP THE LOOP ↗",
+        "cta_link": "",
+        "bg_color": "#ffffff",
+        "text_color": "#0e0e0e",
+        "muted_color": "#5b5b5b",
+        "border_color": "#0e0e0e",
+        "accent_color": "#fc0301",
+        "star_color": "#fc0301",
+        "card_bg": "#ffffff",
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "empty_text": "ADD 5–10 TESTIMONIALS IN THE THEME EDITOR."
+      }
+    },
+    "story": {
+      "type": "story-strip",
+      "settings": {
+        "eyebrow": "THE CRAFT",
+        "heading": "HANDMADE",
+        "accent": "IN INDIA.",
+        "text": "Every mask is hand-stitched, every poster is QC'd by fans, and every metallic item is crafted for durability. We don't just sell items; we sell pieces of the universe you love.",
+        "button_label": "READ THE STORY",
+        "button_link": ""
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "eyebrow": "STAY IN THE LOOP",
+        "heading": "JOIN THE",
+        "accent": "RESISTANCE.",
+        "text": "Get early access to drops, limited editions, and nerd lore."
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "manifesto",
+    "categories",
+    "vault",
+    "testimonials",
+    "story",
+    "newsletter"
+  ]
+}

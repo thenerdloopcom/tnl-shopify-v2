@@ -1,0 +1,449 @@
+{%- comment -%}
+  TheNerdLoop — Testimonials ("Loop Proof")
+  Add 5–10 "Testimonial" blocks in the theme editor.
+  Relies on the theme's existing :root tokens (--line, --yellow, --red, --blue, --font-anton, --font-jetbrains-mono).
+  All fallbacks are included so it also works standalone.
+{%- endcomment -%}
+
+{%- liquid
+  assign blocks_count = section.blocks.size
+  assign total = 0
+  for block in section.blocks
+    assign total = total | plus: block.settings.rating
+  endfor
+  if section.settings.auto_rating and blocks_count > 0
+    assign avg = total | times: 1.0 | divided_by: blocks_count | round: 1
+    assign review_total = blocks_count
+  else
+    assign avg = section.settings.manual_rating
+    assign review_total = section.settings.manual_review_count
+  endif
+  assign avg_stars = avg | round
+-%}
+
+<section
+  id="tt-{{ section.id }}"
+  class="tt"
+  data-tt
+  {% if section.settings.autoplay %}data-autoplay{% endif %}
+  data-delay="{{ section.settings.autoplay_delay }}"
+  data-pause-hover="{{ section.settings.pause_on_hover }}"
+  style="
+    --tt-bg: {{ section.settings.bg_color }};
+    --tt-text: {{ section.settings.text_color }};
+    --tt-muted: {{ section.settings.muted_color }};
+    --tt-line: {{ section.settings.border_color }};
+    --tt-accent: {{ section.settings.accent_color }};
+    --tt-star: {{ section.settings.star_color }};
+    --tt-card-bg: {{ section.settings.card_bg }};
+    --tt-card-w: {{ section.settings.card_width }}px;
+    --tt-card-w-m: {{ section.settings.card_width_mobile }}vw;
+    --tt-gap: {{ section.settings.card_gap }}px;
+    --tt-ratio: {{ section.settings.image_ratio }};
+    --tt-border: {{ section.settings.border_width }}px;
+    --tt-shadow: {{ section.settings.shadow_size }}px;
+    --tt-pt: {{ section.settings.padding_top }}px;
+    --tt-pb: {{ section.settings.padding_bottom }}px;
+    --tt-quote: {{ section.settings.quote_size }}px;
+  "
+>
+  <div class="tt__inner">
+
+    <header class="tt__head">
+      <div class="tt__title">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="tt__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        <h2 class="tt__heading">
+          {{ section.settings.heading }}
+          {%- if section.settings.accent != blank %} <span>{{ section.settings.accent }}</span>{% endif -%}
+        </h2>
+        {%- if section.settings.subheading != blank -%}
+          <p class="tt__sub">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.show_summary -%}
+        <div class="tt__summary">
+          <div class="tt__score">
+            <b>{{ avg }}</b><span>/5</span>
+          </div>
+          <div class="tt__summary-meta">
+            <span class="tt__stars" aria-label="{{ avg }} out of 5 stars">
+              {%- for i in (1..5) -%}
+                <i class="{% if i <= avg_stars %}on{% endif %}">★</i>
+              {%- endfor -%}
+            </span>
+            <small>
+              {{ review_total }} {{ section.settings.reviews_label }}
+              {%- if section.settings.show_verified_note %}
+                <em class="tt__check" aria-hidden="true">✓</em> {{ section.settings.verified_note }}
+              {%- endif -%}
+            </small>
+          </div>
+        </div>
+      {%- endif -%}
+    </header>
+
+    {%- if blocks_count > 0 -%}
+      <div class="tt__rail-wrap">
+        <ul class="tt__rail" data-tt-rail tabindex="0" aria-label="{{ section.settings.heading | escape }}">
+          {%- for block in section.blocks -%}
+            {%- assign b = block.settings -%}
+            <li class="tt__card tt__card--{{ b.card_color }}" {{ block.shopify_attributes }}>
+
+              <figure class="tt__photo">
+                {%- if b.image != blank -%}
+                  {%- assign tt_alt = b.image.alt | default: b.name -%}
+                  {{ b.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 540, 720, 900', sizes: '(max-width: 800px) 85vw, 460px', alt: tt_alt }}
+                {%- else -%}
+                  {{ 'lifestyle-1' | placeholder_svg_tag: 'tt__placeholder' }}
+                {%- endif -%}
+                {%- if b.tag != blank -%}
+                  <figcaption class="tt__tag">{{ b.tag }}</figcaption>
+                {%- endif -%}
+              </figure>
+
+              <div class="tt__body">
+                {%- if section.settings.show_card_stars -%}
+                  <span class="tt__stars tt__stars--card" aria-label="{{ b.rating }} out of 5 stars">
+                    {%- for i in (1..5) -%}<i class="{% if i <= b.rating %}on{% endif %}">★</i>{%- endfor -%}
+                  </span>
+                {%- endif -%}
+
+                <blockquote class="tt__quote">{{ b.review }}</blockquote>
+
+                <div class="tt__meta">
+                  <div class="tt__who">
+                    <strong>{{ b.name }}</strong>
+                    {%- if b.verified -%}
+                      <span class="tt__verified" title="{{ section.settings.verified_label | escape }}">
+                        <i aria-hidden="true">✓</i> {{ section.settings.verified_label }}
+                      </span>
+                    {%- endif -%}
+                  </div>
+
+                  {%- if b.location != blank or b.date != blank -%}
+                    <small class="tt__loc">
+                      {{ b.location }}{% if b.location != blank and b.date != blank %} / {% endif %}{{ b.date }}
+                    </small>
+                  {%- endif -%}
+
+                  {%- if b.product != blank or b.product_name != blank -%}
+                    <div class="tt__product">
+                      <span>{{ section.settings.product_label }}</span>
+                      {%- if b.product != blank -%}
+                        <a href="{{ b.product.url }}">{{ b.product.title }}</a>
+                      {%- else -%}
+                        <b>{{ b.product_name }}</b>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      {%- if section.settings.show_nav -%}
+        <div class="tt__nav">
+          <div class="tt__progress" aria-hidden="true"><span data-tt-bar></span></div>
+          {%- if section.settings.show_counter -%}
+            <p class="tt__count" aria-live="polite"><b data-tt-current>01</b> / {{ blocks_count | prepend: '00' | slice: -2, 2 }}</p>
+          {%- endif -%}
+          <div class="tt__btns">
+            <button type="button" data-tt-prev aria-label="{{ section.settings.prev_label | escape }}">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M19 12H5M11 5l-7 7 7 7"/></svg>
+            </button>
+            <button type="button" data-tt-next aria-label="{{ section.settings.next_label | escape }}">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      <div class="tt__empty">{{ section.settings.empty_text }}</div>
+    {%- endif -%}
+
+    {%- if section.settings.cta_label != blank and section.settings.cta_link != blank -%}
+      <div class="tt__cta">
+        <a class="comic-button" href="{{ section.settings.cta_link }}">{{ section.settings.cta_label }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <style>
+    #tt-{{ section.id }} { background: var(--tt-bg); color: var(--tt-text); padding: var(--tt-pt) 0 var(--tt-pb); border-bottom: 2px solid var(--line, #050505); overflow: hidden; }
+    #tt-{{ section.id }} .tt__inner { padding: 0 5vw; }
+
+    /* header */
+    #tt-{{ section.id }} .tt__head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; margin-bottom: 40px; }
+    #tt-{{ section.id }} .tt__eyebrow { font: 700 10px var(--font-jetbrains-mono), monospace; letter-spacing: .12em; margin: 0 0 18px; }
+    #tt-{{ section.id }} .tt__heading { font: 400 clamp(46px, 7vw, 104px)/.82 var(--font-anton), Impact, sans-serif; letter-spacing: -.04em; margin: 0; text-transform: uppercase; }
+    #tt-{{ section.id }} .tt__heading span { color: var(--tt-accent); }
+    #tt-{{ section.id }} .tt__sub { max-width: 420px; margin: 22px 0 0; font: 13px/1.6 var(--font-jetbrains-mono), monospace; color: var(--tt-muted); }
+
+    /* summary */
+    #tt-{{ section.id }} .tt__summary { display: flex; align-items: center; gap: 18px; border: var(--tt-border) solid var(--tt-line); background: var(--tt-card-bg); padding: 14px 20px; }
+    #tt-{{ section.id }} .tt__score { font: 400 64px/.8 var(--font-anton), Impact, sans-serif; letter-spacing: -.03em; }
+    #tt-{{ section.id }} .tt__score span { font-size: 22px; color: var(--tt-muted); letter-spacing: 0; margin-left: 2px; }
+    #tt-{{ section.id }} .tt__summary-meta { display: grid; gap: 6px; }
+    #tt-{{ section.id }} .tt__summary-meta small { font: 700 10px var(--font-jetbrains-mono), monospace; letter-spacing: .06em; }
+    #tt-{{ section.id }} .tt__check { font-style: normal; display: inline-grid; place-items: center; width: 14px; height: 14px; background: var(--tt-text); color: var(--tt-bg); font-size: 9px; margin-left: 8px; vertical-align: 1px; }
+
+    /* stars */
+    #tt-{{ section.id }} .tt__stars { display: inline-flex; gap: 2px; font-size: 16px; line-height: 1; }
+    #tt-{{ section.id }} .tt__stars i { font-style: normal; color: transparent; -webkit-text-stroke: 1px var(--tt-text); }
+    #tt-{{ section.id }} .tt__stars i.on { color: var(--tt-star); }
+
+    /* rail */
+    #tt-{{ section.id }} .tt__rail { list-style: none; margin: 0; padding: 0 var(--tt-shadow) calc(var(--tt-shadow) + 6px) 0; display: flex; gap: var(--tt-gap); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    #tt-{{ section.id }} .tt__rail::-webkit-scrollbar { display: none; }
+    #tt-{{ section.id }} .tt__rail:focus-visible { outline: 3px solid var(--tt-accent); outline-offset: 4px; }
+
+    /* card */
+    #tt-{{ section.id }} .tt__card { flex: 0 0 var(--tt-card-w); scroll-snap-align: start; display: flex; flex-direction: column; border: var(--tt-border) solid var(--tt-line); background: var(--tt-card-bg); box-shadow: var(--tt-shadow) var(--tt-shadow) 0 var(--tt-line); }
+    #tt-{{ section.id }} .tt__card--yellow, #tt-{{ section.id }} .tt__card--red, #tt-{{ section.id }} .tt__card--blue, #tt-{{ section.id }} .tt__card--purple, #tt-{{ section.id }} .tt__card--orange, #tt-{{ section.id }} .tt__card--black { background: #ffffff; color: #0E0E0E; }
+
+    #tt-{{ section.id }} .tt__photo { position: relative; margin: 0; aspect-ratio: var(--tt-ratio); background: rgba(14, 14, 14, 0.05); border-bottom: var(--tt-border) solid var(--tt-line); overflow: hidden; }
+    #tt-{{ section.id }} .tt__photo img, #tt-{{ section.id }} .tt__placeholder { width: 100%; height: 100%; object-fit: cover; display: block; }
+    #tt-{{ section.id }} .tt__placeholder { background: rgba(14, 14, 14, 0.05); fill: rgba(14, 14, 14, 0.25); padding: 20%; }
+    #tt-{{ section.id }} .tt__tag { position: absolute; left: 0; bottom: 0; background: #0E0E0E; color: #ffffff; border-top: var(--tt-border) solid var(--tt-line); border-right: var(--tt-border) solid var(--tt-line); padding: 6px 10px; font: 700 10px var(--font-jetbrains-mono), monospace; letter-spacing: .08em; }
+
+    #tt-{{ section.id }} .tt__body { display: flex; flex-direction: column; gap: 12px; padding: 14px 16px 16px; flex: 1; }
+    #tt-{{ section.id }} .tt__stars--card { font-size: 15px; }
+    #tt-{{ section.id }} .tt__card--red .tt__stars i, #tt-{{ section.id }} .tt__card--blue .tt__stars i, #tt-{{ section.id }} .tt__card--purple .tt__stars i, #tt-{{ section.id }} .tt__card--black .tt__stars i { -webkit-text-stroke-color: currentColor; }
+    #tt-{{ section.id }} .tt__quote { margin: 0; font: 400 var(--tt-quote)/1.02 var(--font-anton), Impact, sans-serif; letter-spacing: -.01em; text-transform: uppercase; flex: 1; }
+
+    #tt-{{ section.id }} .tt__meta { border-top: 2px solid currentColor; padding-top: 10px; display: grid; gap: 5px; font: 11px/1.4 var(--font-jetbrains-mono), monospace; }
+    #tt-{{ section.id }} .tt__who { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    #tt-{{ section.id }} .tt__who strong { font: 900 14px 'Arial Black', sans-serif; letter-spacing: -.04em; }
+    #tt-{{ section.id }} .tt__verified { display: inline-flex; align-items: center; gap: 5px; font: 700 9px var(--font-jetbrains-mono), monospace; letter-spacing: .08em; border: 1px solid currentColor; padding: 3px 6px; text-transform: uppercase; }
+    #tt-{{ section.id }} .tt__verified i { font-style: normal; }
+    #tt-{{ section.id }} .tt__loc { font-size: 10px; opacity: .7; text-transform: uppercase; letter-spacing: .06em; }
+    #tt-{{ section.id }} .tt__product { display: flex; gap: 8px; flex-wrap: wrap; align-items: baseline; }
+    #tt-{{ section.id }} .tt__product span { opacity: .7; text-transform: uppercase; font-size: 10px; letter-spacing: .08em; }
+    #tt-{{ section.id }} .tt__product a, #tt-{{ section.id }} .tt__product b { font-weight: 700; }
+    #tt-{{ section.id }} .tt__product a { text-decoration: underline; text-underline-offset: 3px; }
+    #tt-{{ section.id }} .tt__product a:hover { color: var(--tt-accent); }
+
+    /* nav */
+    #tt-{{ section.id }} .tt__nav { display: flex; align-items: center; gap: 24px; margin-top: 26px; }
+    #tt-{{ section.id }} .tt__progress { flex: 1; height: 6px; border: 2px solid var(--tt-line); background: transparent; position: relative; }
+    #tt-{{ section.id }} .tt__progress span { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--tt-text); transition: width .12s linear; }
+    #tt-{{ section.id }} .tt__count { margin: 0; font: 700 12px var(--font-jetbrains-mono), monospace; letter-spacing: .08em; white-space: nowrap; }
+    #tt-{{ section.id }} .tt__btns { display: flex; }
+    #tt-{{ section.id }} .tt__btns button { width: 48px; height: 48px; display: grid; place-items: center; background: var(--tt-card-bg); color: var(--tt-text); border: var(--tt-border) solid var(--tt-line); cursor: pointer; transition: background .12s; }
+    #tt-{{ section.id }} .tt__btns button + button { border-left: 0; }
+    #tt-{{ section.id }} .tt__btns button:hover:not(:disabled) { background: #0E0E0E; color: #ffffff; }
+    #tt-{{ section.id }} .tt__btns button:focus-visible { outline: 3px solid var(--tt-accent); outline-offset: 2px; }
+    #tt-{{ section.id }} .tt__btns button:disabled { opacity: .3; cursor: default; }
+
+    #tt-{{ section.id }} .tt__cta { margin-top: 40px; display: flex; justify-content: center; }
+    #tt-{{ section.id }} .tt__empty { min-height: 200px; display: grid; place-items: center; border: 2px dashed var(--tt-line); font: 700 12px var(--font-jetbrains-mono), monospace; text-align: center; padding: 20px; }
+
+    @media (max-width: 800px) {
+      #tt-{{ section.id }} .tt__card { flex-basis: var(--tt-card-w-m); }
+      #tt-{{ section.id }} .tt__head { align-items: flex-start; flex-direction: column; margin-bottom: 28px; }
+      #tt-{{ section.id }} .tt__quote { font-size: calc(var(--tt-quote) * .85); }
+      #tt-{{ section.id }} .tt__btns button { width: 44px; height: 44px; }
+    }
+  </style>
+
+  <script>
+    (function () {
+      var root = document.getElementById('tt-{{ section.id }}');
+      if (!root) return;
+      var rail = root.querySelector('[data-tt-rail]');
+      if (!rail) return;
+      var prev = root.querySelector('[data-tt-prev]');
+      var next = root.querySelector('[data-tt-next]');
+      var bar = root.querySelector('[data-tt-bar]');
+      var cur = root.querySelector('[data-tt-current]');
+      var cards = rail.children;
+
+      function step() {
+        var c = cards[0];
+        if (!c) return 0;
+        return c.getBoundingClientRect().width + parseFloat(getComputedStyle(rail).columnGap || 0);
+      }
+      function update() {
+        var max = rail.scrollWidth - rail.clientWidth;
+        var x = rail.scrollLeft;
+        if (bar) bar.style.width = (max > 0 ? Math.max(8, (x / max) * 100) : 100) + '%';
+        if (prev) prev.disabled = x <= 2;
+        if (next) next.disabled = x >= max - 2;
+        if (cur) {
+          var i = x >= max - 2 ? cards.length : Math.round(x / (step() || 1)) + 1;
+          cur.textContent = ('0' + i).slice(-2);
+        }
+      }
+      if (prev) prev.addEventListener('click', function () { rail.scrollBy({ left: -step(), behavior: 'smooth' }); });
+      if (next) next.addEventListener('click', function () { rail.scrollBy({ left: step(), behavior: 'smooth' }); });
+      rail.addEventListener('scroll', function () { window.requestAnimationFrame(update); }, { passive: true });
+      rail.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); rail.scrollBy({ left: step(), behavior: 'smooth' }); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); rail.scrollBy({ left: -step(), behavior: 'smooth' }); }
+      });
+      window.addEventListener('resize', update);
+      update();
+
+      /* ---- autoplay ---- */
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (root.hasAttribute('data-autoplay') && !reduce && cards.length > 1) {
+        var delay = Math.max(2, parseInt(root.getAttribute('data-delay'), 10) || 4) * 1000;
+        var pauseHover = root.getAttribute('data-pause-hover') === 'true';
+        var timer = null, hold = false, visible = true;
+
+        function tick() {
+          if (hold || !visible || document.hidden) return;
+          var max = rail.scrollWidth - rail.clientWidth;
+          if (rail.scrollLeft >= max - 2) rail.scrollTo({ left: 0, behavior: 'smooth' });
+          else rail.scrollBy({ left: step(), behavior: 'smooth' });
+        }
+        function start() { stop(); timer = setInterval(tick, delay); }
+        function stop() { if (timer) { clearInterval(timer); timer = null; } }
+
+        if (pauseHover) {
+          root.addEventListener('mouseenter', function () { hold = true; });
+          root.addEventListener('mouseleave', function () { hold = false; });
+        }
+        root.addEventListener('focusin', function () { hold = true; });
+        root.addEventListener('focusout', function () { hold = false; });
+        rail.addEventListener('touchstart', function () { hold = true; }, { passive: true });
+        rail.addEventListener('touchend', function () { setTimeout(function () { hold = false; }, delay); }, { passive: true });
+
+        if ('IntersectionObserver' in window) {
+          new IntersectionObserver(function (e) { visible = e[0].isIntersecting; }, { threshold: 0.2 }).observe(root);
+        }
+        start();
+      }
+    })();
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "tag": "div",
+  "class": "section-testimonials",
+  "max_blocks": 10,
+  "settings": [
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "STRAIGHT FROM THE LOOP" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "REAL PEOPLE." },
+    { "type": "text", "id": "accent", "label": "Heading accent (coloured)", "default": "REAL PIECES." },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Photos and reviews from the Loop. No stock shots, no filters." },
+
+    { "type": "header", "content": "Rating summary" },
+    { "type": "checkbox", "id": "show_summary", "label": "Show rating summary", "default": true },
+    { "type": "checkbox", "id": "auto_rating", "label": "Calculate rating from testimonials below", "info": "Turn off to type your own overall rating and review count.", "default": false },
+    { "type": "range", "id": "manual_rating", "label": "Overall rating", "min": 1, "max": 5, "step": 0.1, "default": 4.9 },
+    { "type": "number", "id": "manual_review_count", "label": "Total review count", "default": 1200 },
+    { "type": "text", "id": "reviews_label", "label": "Reviews label", "default": "REVIEWS" },
+    { "type": "checkbox", "id": "show_verified_note", "label": "Show verified note in summary", "default": true },
+    { "type": "text", "id": "verified_note", "label": "Verified note", "default": "VERIFIED BUYERS" },
+
+    { "type": "header", "content": "Cards" },
+    { "type": "text", "id": "verified_label", "label": "Verified badge text", "default": "VERIFIED" },
+    { "type": "text", "id": "product_label", "label": "Product label", "default": "GOT:" },
+    { "type": "checkbox", "id": "show_card_stars", "label": "Show stars on each card", "default": true },
+    { "type": "range", "id": "card_width", "label": "Card width (desktop)", "min": 260, "max": 560, "step": 10, "unit": "px", "default": 400 },
+    { "type": "range", "id": "card_width_mobile", "label": "Card width (mobile)", "min": 60, "max": 95, "step": 1, "unit": "vw", "default": 82 },
+    { "type": "range", "id": "card_gap", "label": "Gap between cards", "min": 0, "max": 48, "step": 2, "unit": "px", "default": 18 },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Photo shape",
+      "options": [
+        { "value": "4 / 5", "label": "Portrait 4:5 (tallest)" },
+        { "value": "1 / 1", "label": "Square" },
+        { "value": "4 / 3", "label": "Landscape 4:3" },
+        { "value": "3 / 2", "label": "Landscape 3:2" },
+        { "value": "16 / 9", "label": "Wide 16:9 (shortest)" }
+      ],
+      "default": "4 / 3"
+    },
+    { "type": "range", "id": "quote_size", "label": "Review text size", "min": 16, "max": 40, "step": 1, "unit": "px", "default": 22 },
+    { "type": "range", "id": "border_width", "label": "Border thickness", "min": 1, "max": 4, "step": 1, "unit": "px", "default": 2 },
+    { "type": "range", "id": "shadow_size", "label": "Hard shadow size (0 = none)", "min": 0, "max": 14, "step": 1, "unit": "px", "default": 6 },
+
+    { "type": "header", "content": "Auto scroll" },
+    { "type": "checkbox", "id": "autoplay", "label": "Auto scroll", "default": true },
+    { "type": "range", "id": "autoplay_delay", "label": "Seconds between slides", "min": 2, "max": 10, "step": 1, "unit": "s", "default": 4 },
+    { "type": "checkbox", "id": "pause_on_hover", "label": "Pause on hover", "info": "Auto scroll is also paused on touch and keyboard focus, and is off for visitors who prefer reduced motion.", "default": true },
+
+    { "type": "header", "content": "Navigation" },
+    { "type": "checkbox", "id": "show_nav", "label": "Show navigation bar", "default": true },
+    { "type": "checkbox", "id": "show_counter", "label": "Show counter (01 / 07)", "default": true },
+    { "type": "text", "id": "prev_label", "label": "Previous button (accessibility label)", "default": "Previous testimonials" },
+    { "type": "text", "id": "next_label", "label": "Next button (accessibility label)", "default": "Next testimonials" },
+
+    { "type": "header", "content": "Button below the strip" },
+    { "type": "text", "id": "cta_label", "label": "Button label", "info": "Leave empty to hide.", "default": "SHOP THE LOOP ↗" },
+    { "type": "url", "id": "cta_link", "label": "Button link" },
+
+    { "type": "header", "content": "Colours" },
+    { "type": "color", "id": "bg_color", "label": "Section background", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#0E0E0E" },
+    { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#5B5B5B" },
+    { "type": "color", "id": "border_color", "label": "Borders and shadows", "default": "#0E0E0E" },
+    { "type": "color", "id": "accent_color", "label": "Heading accent / focus", "default": "#FC0301" },
+    { "type": "color", "id": "star_color", "label": "Filled stars", "default": "#FC0301" },
+    { "type": "color", "id": "card_bg", "label": "Default card background", "default": "#ffffff" },
+
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 80 },
+
+    { "type": "header", "content": "Empty state" },
+    { "type": "text", "id": "empty_text", "label": "Text when no testimonials added", "default": "ADD 5–10 TESTIMONIALS IN THE THEME EDITOR." }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Customer photo", "info": "Use the customer's own photo for an authentic look." },
+        { "type": "textarea", "id": "review", "label": "Review", "info": "Keep it short and punchy — roughly 15–25 words.", "default": "Finally a card that actually looks like it came out of the Loop. Everyone asks where I got it." },
+        { "type": "text", "id": "name", "label": "Customer name", "default": "Aarav M." },
+        { "type": "text", "id": "location", "label": "Location (optional)", "default": "Bengaluru" },
+        { "type": "text", "id": "date", "label": "Date (optional)", "default": "Sep 2026" },
+        { "type": "checkbox", "id": "verified", "label": "Verified buyer", "default": true },
+        { "type": "range", "id": "rating", "label": "Rating", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "product", "id": "product", "label": "Purchased product (links to product)" },
+        { "type": "text", "id": "product_name", "label": "Purchased product name (if not linking)", "info": "Used only when no product is selected above." },
+        { "type": "text", "id": "tag", "label": "Photo tag (optional)", "info": "Small label on the photo, e.g. #LOOPFIT" },
+        {
+          "type": "select",
+          "id": "card_color",
+          "label": "Card colour",
+          "options": [
+            { "value": "paper", "label": "White (default)" },
+            { "value": "yellow", "label": "Yellow" },
+            { "value": "red", "label": "Red" },
+            { "value": "blue", "label": "Blue" },
+            { "value": "purple", "label": "Purple" },
+            { "value": "orange", "label": "Orange" },
+            { "value": "black", "label": "Black" }
+          ],
+          "default": "paper"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        { "type": "testimonial", "settings": { "card_color": "paper" } },
+        { "type": "testimonial", "settings": { "card_color": "paper", "name": "Diya K.", "location": "Mumbai" } },
+        { "type": "testimonial", "settings": { "card_color": "paper", "name": "Rohan S.", "location": "Delhi" } },
+        { "type": "testimonial", "settings": { "card_color": "paper", "name": "Ishita P.", "location": "Pune" } },
+        { "type": "testimonial", "settings": { "card_color": "paper", "name": "Kabir T.", "location": "Chennai" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,109 @@
+{% doc %}
+  @prompt
+    testimonials
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-testimonials-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    background: {{ block.settings.background_color }};
+    color: {{ block.settings.text_color }};
+    padding: clamp(24px, 5vw, 64px);
+    border: 1px solid {{ block.settings.text_color }};
+    box-sizing: border-box;
+  }
+
+  .ai-testimonials-{{ ai_gen_id }}__inner { max-width: 110rem; margin: 0 auto; }
+  .ai-testimonials-{{ ai_gen_id }}__head { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: end; margin-bottom: 40px; }
+  .ai-testimonials-{{ ai_gen_id }}__eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 12px; }
+  .ai-testimonials-{{ ai_gen_id }}__title { margin: 0; font-size: clamp(32px, 5vw, 64px); line-height: .98; letter-spacing: -.04em; font-weight: 800; }
+  .ai-testimonials-{{ ai_gen_id }}__intro { font-size: 16px; line-height: 1.55; max-width: 38rem; justify-self: end; }
+  .ai-testimonials-{{ ai_gen_id }}__intro p { margin: 0; }
+  .ai-testimonials-{{ ai_gen_id }}__grid { display: grid; grid-template-columns: repeat({{ block.settings.columns_desktop }}, minmax(0, 1fr)); gap: 12px; }
+  .ai-testimonials-{{ ai_gen_id }}__card { border: 1px solid {{ block.settings.text_color }}; padding: 24px; min-height: 220px; display: flex; flex-direction: column; justify-content: space-between; }
+  .ai-testimonials-{{ ai_gen_id }}__quote { font-size: clamp(18px, 2vw, 26px); line-height: 1.2; margin: 0 0 28px; font-weight: 600; }
+  .ai-testimonials-{{ ai_gen_id }}__attribution { display: flex; justify-content: space-between; gap: 12px; align-items: end; border-top: 1px solid currentColor; padding-top: 14px; }
+  .ai-testimonials-{{ ai_gen_id }}__name { font-size: 14px; font-weight: 700; margin: 0; }
+  .ai-testimonials-{{ ai_gen_id }}__detail { font-size: 12px; margin: 4px 0 0; opacity: .78; }
+  .ai-testimonials-{{ ai_gen_id }}__rating { font-size: 14px; letter-spacing: .12em; white-space: nowrap; }
+  .ai-testimonials-{{ ai_gen_id }}__empty { border: 1px dashed {{ block.settings.text_color }}; padding: 32px; text-align: center; }
+  .ai-testimonials-{{ ai_gen_id }}__empty p { margin: 0; }
+  @media screen and (max-width: 749px) {
+    .ai-testimonials-{{ ai_gen_id }} { width: 100%; padding: 24px 18px; }
+    .ai-testimonials-{{ ai_gen_id }}__head { grid-template-columns: 1fr; gap: 16px; margin-bottom: 24px; }
+    .ai-testimonials-{{ ai_gen_id }}__intro { justify-self: start; }
+    .ai-testimonials-{{ ai_gen_id }}__grid { grid-template-columns: 1fr; }
+    .ai-testimonials-{{ ai_gen_id }}__card { min-height: 0; }
+  }
+{% endstyle %}
+
+<div class="ai-testimonials-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-testimonials-{{ ai_gen_id }}__inner">
+    <div class="ai-testimonials-{{ ai_gen_id }}__head">
+      <div>
+        {% if block.settings.eyebrow != blank %}<p class="ai-testimonials-{{ ai_gen_id }}__eyebrow">{{ block.settings.eyebrow | escape }}</p>{% endif %}
+        {% if block.settings.heading != blank %}<h2 class="ai-testimonials-{{ ai_gen_id }}__title">{{ block.settings.heading | escape }}</h2>{% endif %}
+      </div>
+      {% if block.settings.intro != blank %}<div class="ai-testimonials-{{ ai_gen_id }}__intro">{{ block.settings.intro }}</div>{% endif %}
+    </div>
+    <div class="ai-testimonials-{{ ai_gen_id }}__grid">
+      {% assign testimonial_count = 0 %}
+      {% for i in (1..3) %}
+        {% assign quote_key = 'quote_' | append: i %}
+        {% assign name_key = 'name_' | append: i %}
+        {% assign detail_key = 'detail_' | append: i %}
+        {% assign quote_value = block.settings[quote_key] %}
+        {% assign name_value = block.settings[name_key] %}
+        {% assign detail_value = block.settings[detail_key] %}
+        {% if quote_value != blank %}
+          {% assign testimonial_count = testimonial_count | plus: 1 %}
+          <article class="ai-testimonials-{{ ai_gen_id }}__card">
+            <blockquote class="ai-testimonials-{{ ai_gen_id }}__quote">“{{ quote_value | escape }}”</blockquote>
+            <div class="ai-testimonials-{{ ai_gen_id }}__attribution">
+              <div>
+                {% if name_value != blank %}<p class="ai-testimonials-{{ ai_gen_id }}__name">{{ name_value | escape }}</p>{% endif %}
+                {% if detail_value != blank %}<p class="ai-testimonials-{{ ai_gen_id }}__detail">{{ detail_value | escape }}</p>{% endif %}
+              </div>
+              {% if block.settings.show_rating %}<span class="ai-testimonials-{{ ai_gen_id }}__rating" aria-label="5 out of 5 stars">★★★★★</span>{% endif %}
+            </div>
+          </article>
+        {% endif %}
+      {% endfor %}
+      {% if testimonial_count == 0 %}<div class="ai-testimonials-{{ ai_gen_id }}__empty"><p>Add testimonial quotes in the block settings to display them here.</p></div>{% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "settings": [
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "CUSTOMER NOTES" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Words from the loop" },
+    { "type": "richtext", "id": "intro", "label": "Introduction", "default": "<p>Experiences shared by customers who collect, wear, and live with our pieces.</p>" },
+    { "type": "header", "content": "Testimonials" },
+    { "type": "textarea", "id": "quote_1", "label": "Quote 1" },
+    { "type": "text", "id": "name_1", "label": "Name 1" },
+    { "type": "text", "id": "detail_1", "label": "Detail 1" },
+    { "type": "textarea", "id": "quote_2", "label": "Quote 2" },
+    { "type": "text", "id": "name_2", "label": "Name 2" },
+    { "type": "text", "id": "detail_2", "label": "Detail 2" },
+    { "type": "textarea", "id": "quote_3", "label": "Quote 3" },
+    { "type": "text", "id": "name_3", "label": "Name 3" },
+    { "type": "text", "id": "detail_3", "label": "Detail 3" },
+    { "type": "checkbox", "id": "show_rating", "label": "Show five-star rating", "default": false },
+    { "type": "header", "content": "Layout and style" },
+    { "type": "range", "id": "desktop_width_percent", "label": "Desktop width", "min": 50, "max": 100, "step": 5, "unit": "%", "default": 100 },
+    { "type": "select", "id": "columns_desktop", "label": "Columns on desktop", "options": [{ "value": "2", "label": "2" }, { "value": "3", "label": "3" }], "default": "3" },
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#FFFFFF" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#171717" }
+  ],
+  "presets": [{ "name": "Testimonials" }],
+  "tag": null,
+  "class": "testimonials-block"
+}
+{% endschema %}

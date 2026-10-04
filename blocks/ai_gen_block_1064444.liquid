@@ -1,0 +1,188 @@
+{% doc %}
+  @prompt
+    Finally need to have a reviews sections where LOGGED IN USERS can come and post reviews and read others review (SHOULD NOT DIRECT TO SOMEONES PROFILE) (IF USER NOT LOGGED IN THEN TAKE THEM TO LOGIN PAGE), make the desktop width center aligned instead of left aligned
+{% enddoc %}
+{% doc %}
+  @prompt
+    Finally need to have a reviews sections where LOGGED IN USERS can come and post reviews and read others review (SHOULD NOT DIRECT TO SOMEONES PROFILE) (IF USER NOT LOGGED IN THEN TAKE THEM TO LOGIN PAGE)
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-review-gate-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin-inline: auto;
+    padding: 28px;
+    border: 2px solid {{ block.settings.border_color }};
+    background: {{ block.settings.background_color }};
+    color: {{ block.settings.text_color }};
+  }
+
+  .ai-review-gate-{{ ai_gen_id }}__heading {
+    margin: 0 0 12px;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+  }
+
+  .ai-review-gate-{{ ai_gen_id }}__copy {
+    margin: 0 0 20px;
+    line-height: 1.55;
+  }
+
+  .ai-review-gate-{{ ai_gen_id }}__action {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 48px;
+    padding: 12px 20px;
+    border: 2px solid {{ block.settings.button_background }};
+    background: {{ block.settings.button_background }};
+    color: {{ block.settings.button_text }};
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .ai-review-gate-{{ ai_gen_id }}__action:hover {
+    background: {{ block.settings.button_hover }};
+    border-color: {{ block.settings.button_hover }};
+    color: {{ block.settings.button_text }};
+  }
+
+  .ai-review-gate-{{ ai_gen_id }}__action:focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 4px;
+  }
+
+  .ai-review-gate-{{ ai_gen_id }}__notice {
+    margin: 18px 0 0;
+    padding-top: 14px;
+    border-top: 1px solid {{ block.settings.border_color }};
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+{% endstyle %}
+
+<div class="ai-review-gate-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <h2 class="ai-review-gate-{{ ai_gen_id }}__heading">{{ block.settings.heading | escape }}</h2>
+  <p class="ai-review-gate-{{ ai_gen_id }}__copy">{{ block.settings.description | escape }}</p>
+  {% if customer %}
+    {% if block.settings.reviews_url != blank %}
+      <a class="ai-review-gate-{{ ai_gen_id }}__action" href="{{ block.settings.reviews_url }}">{{ block.settings.button_label | escape }}</a>
+    {% else %}
+      <p class="ai-review-gate-{{ ai_gen_id }}__notice">{{ block.settings.integration_notice | escape }}</p>
+    {% endif %}
+  {% else %}
+    <a class="ai-review-gate-{{ ai_gen_id }}__action" href="{{ routes.account_login_url }}?return_url={{ request.path | url_encode }}">{{ block.settings.login_label | escape }}</a>
+  {% endif %}
+  <p class="ai-review-gate-{{ ai_gen_id }}__notice">{{ block.settings.integration_notice | escape }}</p>
+</div>
+
+{% schema %}
+{
+  "name": "Review access panel",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Customer reviews"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Sign in to share your review and read feedback from other customers. Reviews are not linked to public customer profiles."
+    },
+    {
+      "type": "text",
+      "id": "login_label",
+      "label": "Login button",
+      "default": "Log in to continue"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Reviews button",
+      "default": "Open reviews"
+    },
+    {
+      "type": "url",
+      "id": "reviews_url",
+      "label": "Reviews app destination"
+    },
+    {
+      "type": "text",
+      "id": "integration_notice",
+      "label": "Integration notice",
+      "default": "Connect a product reviews app to collect, moderate, and display reviews. Shopify themes do not store or publish customer reviews on their own."
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#171717"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border",
+      "default": "#171717"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#171717"
+    },
+    {
+      "type": "color",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "button_hover",
+      "label": "Button hover",
+      "default": "#333333"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Review access panel"
+    }
+  ],
+  "tag": null,
+  "class": "review-access-panel"
+}
+{% endschema %}

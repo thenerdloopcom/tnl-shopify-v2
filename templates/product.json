@@ -1,0 +1,81 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "product",
+      "settings": {}
+    },
+    "179052024889cfa3da": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_bfda366_DLri9c": {
+          "type": "ai_gen_block_bfda366",
+          "disabled": true,
+          "settings": {
+            "title": "Product information",
+            "title_size": 28,
+            "label_1": "What's in the box?",
+            "content_1": "<p>List what is included with this product.</p>",
+            "label_2": "Description",
+            "content_2": "<p>Add a detailed product description here.</p>",
+            "label_3": "Dimensions",
+            "content_3": "<p>Add the product dimensions here.</p>",
+            "label_4": "Returns & refunds",
+            "use_refund_policy": false,
+            "content_4": "<p>Share your returns and refund information here.</p>",
+            "label_5": "Shipping policy",
+            "use_shipping_policy": false,
+            "content_5": "<p>Share your shipping policy here.</p>",
+            "desktop_width_percent": 95,
+            "item_size": 17,
+            "content_size": 15
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_bfda366_DLri9c"
+      ],
+      "disabled": true,
+      "name": "Product Info",
+      "settings": {}
+    },
+    "17905209346ae50acc": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_685a3bb_jUawHV": {
+          "type": "ai_gen_block_685a3bb",
+          "settings": {
+            "heading": "Others Also Bought",
+            "source_collection": "access-cards",
+            "match_type": "collection",
+            "desktop_width_percent": 95,
+            "heading_size": 30,
+            "section_padding": 60,
+            "text_color": "#333333",
+            "border_color": "#333333"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_685a3bb_jUawHV"
+      ],
+      "name": "Related Products",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "179052024889cfa3da",
+    "17905209346ae50acc"
+  ]
+}

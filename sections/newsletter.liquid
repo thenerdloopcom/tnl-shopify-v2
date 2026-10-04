@@ -1,0 +1,29 @@
+<section class="newsletter">
+  <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+  <h2>{{ section.settings.heading }} <span>{{ section.settings.accent }}</span></h2>
+  <p>{{ section.settings.text }}</p>
+
+  {%- form 'customer', id: 'newsletter' -%}
+    <input type="hidden" name="contact[tags]" value="newsletter">
+    <input type="email" name="contact[email]" placeholder="EMAIL@DOMAIN.COM" required autocomplete="email">
+    <button type="submit">ENLIST ↗</button>
+    {%- if form.posted_successfully? -%}
+      <p class="newsletter-msg">YOU'RE IN THE LOOP.</p>
+    {%- elsif form.errors -%}
+      <p class="newsletter-msg">{{ form.errors | default_errors }}</p>
+    {%- endif -%}
+  {%- endform -%}
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "STAY IN THE LOOP" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "JOIN THE" },
+    { "type": "text", "id": "accent", "label": "Heading accent", "default": "RESISTANCE." },
+    { "type": "text", "id": "text", "label": "Text", "default": "Get early access to drops, limited editions, and nerd lore." }
+  ],
+  "presets": [{ "name": "Newsletter" }]
+}
+{% endschema %}
